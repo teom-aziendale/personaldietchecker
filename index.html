@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Personal Diet Checker</title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DietChecker">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-deep: #030f0f;
+            --accent: #00df82;
+            --white: #ffffff;
+            --card-bg: #0a1a1a;
+            --border: #142b2b;
+            --text-muted: #526b6b;
+            
+            --safe-top: env(safe-area-inset-top, 20px);
+            --safe-bottom: env(safe-area-inset-bottom, 20px);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            /* Centratura verticale e orizzontale assoluta di tutto il blocco */
+            justify-content: center; 
+            align-items: center;
+            padding: calc(var(--safe-top) + 20px) 24px calc(var(--safe-bottom) + 20px) 24px;
+            overflow: hidden;
+        }
+
+        /* --- LOGO ANIMATO (GALLEGGIANTE) --- */
+        .logo-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .logo-svg {
+            width: 80px;
+            height: 80px;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .logo-shadow {
+            width: 50px;
+            height: 6px;
+            background: radial-gradient(ellipse at center, rgba(0, 223, 130, 0.3) 0%, rgba(3, 15, 15, 0) 70%);
+            border-radius: 50%;
+            margin-top: 15px;
+            animation: shadowPulse 4s ease-in-out infinite;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        .header-main {
+            text-align: center;
+            margin-top: 24px;
+            margin-bottom: 48px; /* Spazio calibrato prima dei profili */
+        }
+
+        .header-main h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            text-transform: uppercase;
+        }
+
+        .header-main .subtitle {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 12px;
+        }
+
+        /* --- SELEZIONE PROFILI CENTRATA --- */
+        .profile-container {
+            width: 100%;
+            max-width: 360px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .profile-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 32px 20px;
+            border-radius: 24px;
+            text-decoration: none;
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .profile-card:active {
+            transform: scale(0.95);
+            border-color: var(--accent);
+            background: rgba(0, 223, 130, 0.03);
+            box-shadow: 0 0 20px rgba(0, 223, 130, 0.1);
+        }
+
+        /* --- IMMAGINI PROFILO --- */
+        .profile-img {
+            width: 68px; /* Leggermente più grandi per valorizzarle al centro */
+            height: 68px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border);
+            transition: all 0.25s ease;
+        }
+
+        .profile-card:active .profile-img {
+            border-color: var(--accent);
+            filter: drop-shadow(0 0 4px rgba(0, 223, 130, 0.4));
+        }
+
+        .profile-card span {
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: -0.3px;
+            transition: color 0.25s ease;
+        }
+
+        .profile-card:active span {
+            color: var(--accent);
+        }
+
+        /* --- KEYFRAMES --- */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes shadowPulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.7); opacity: 0.4; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo-wrapper">
+        <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="46" stroke="#142b2b" stroke-width="4"/>
+            <circle cx="50" cy="50" r="46" stroke="#00df82" stroke-width="4" stroke-dasharray="80 200" stroke-linecap="round"/>
+            <path d="M34 52L46 64L68 38" stroke="#00df82" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="logo-shadow"></div>
+    </div>
+    
+    <div class="header-main">
+        <h1>Personal Diet<br><span style="color: var(--accent);">Checker</span></h1>
+        <p class="subtitle">Sincronizzazione Cloud</p>
+    </div>
+
+    <div class="profile-container">
+        <a href="teo.html" class="profile-card">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" class="profile-img" alt="Teo">
+            <span>Teo</span>
+        </a>
+        
+        <a href="cesca.html" class="profile-card">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80" class="profile-img" alt="Cesca">
+            <span>Cesca</span>
+        </a>
+    </div>
+
+</body>
+</html>

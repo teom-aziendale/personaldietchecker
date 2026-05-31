@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Teo — Diet Tracker</title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-deep: #030f0f;
+            --accent: #00df82;
+            --white: #ffffff;
+            --card-bg: #0a1a1a;
+            --border: #142b2b;
+            --text-muted: #526b6b;
+            
+            --safe-top: env(safe-area-inset-top, 20px);
+            --safe-bottom: env(safe-area-inset-bottom, 20px);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--white);
+            min-height: 100vh;
+            padding: calc(var(--safe-top) + 24px) 24px calc(var(--safe-bottom) + 30px) 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- NAVIGATION UPPER BAR --- */
+        .nav-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .back-btn {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            transition: color 0.2s ease;
+        }
+
+        .back-btn:active {
+            color: var(--accent);
+        }
+
+        .day-badge {
+            background: rgba(0, 223, 130, 0.08);
+            border: 1px solid rgba(0, 223, 130, 0.2);
+            color: var(--accent);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .profile-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 32px;
+            text-transform: uppercase;
+        }
+
+        /* --- LISTA PASTI --- */
+        .pasti-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .pasto-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 24px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .pasto-content {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .pasto-label {
+            font-size: 0.7rem;
+            color: var(--accent);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pasto-desc {
+            font-size: 0.95rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        /* --- PREMIUM CHECKBOX --- */
+        .checkbox-container {
+            position: relative;
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+        }
+
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .custom-checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 32px;
+            width: 32px;
+            background: transparent;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-container input:checked ~ .custom-checkmark {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 12px rgba(0, 223, 130, 0.3);
+        }
+
+        .custom-checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 10px;
+            top: 5px;
+            width: 6px;
+            height: 13px;
+            border: solid var(--bg-deep);
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
+        }
+
+        .checkbox-container input:checked ~ .custom-checkmark:after {
+            display: block;
+        }
+
+        /* --- STATUS COMPLETATO --- */
+        .pasto-card.completed {
+            opacity: 0.35;
+            border-color: transparent;
+            background: #050d0d;
+        }
+
+        .pasto-card.completed .pasto-desc {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-top">
+        <a href="index.html" class="back-btn">← Home</a>
+        <span id="live-day-badge" class="day-badge">Caricamento...</span>
+    </div>
+
+    <h1 class="profile-title">Teo</h1>
+
+    <div id="pasti-container" class="pasti-flow"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Incolla qui la stessa identica configurazione usata in cesca.html
+        const firebaseConfig = {
+            apiKey: "AIzaSyDD9XmvP6FtXHZPfhrDQnOwtaHvFvIopt4",
+            authDomain: "webapp-dieta.firebaseapp.com",
+            projectId: "webapp-dieta",
+            storageBucket: "webapp-dieta.firebasestorage.app",
+            messagingSenderId: "345168120014",
+            appId: "1:345168120014:web:5ec1f5ef2f87f7eb3d289f"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Database Dieta Statica di Teo
+        const dietaTeo = {
+            "Lunedì": [
+                { id: "t_lun_col", tipo: "Colazione", desc: "2 Uova intere strapazzate in padella + 2 fette di Pane Integrale tostato (60g totali) + 15g di Mandorle o Noci + 1 Mela grande mangiata con la buccia." },
+                { id: "t_lun_pra", tipo: "Pranzo", desc: "80g di Pasta Integrale condita con 120g di Tonno al naturale e passata di pomodoro + Zucchine a rondelle (200g) in friggitrice ad aria (200°C per 12 minuti) + 1 cucchiaio e mezzo di Olio EVO (15g) a crudo." },
+                { id: "t_lun_cen", tipo: "Cena", desc: "1 Hamburger di carne rossa magra (150g) in friggitrice ad aria (190°C per 9 minuti) + Patate a cubetti con la buccia (150g) in friggitrice ad aria (200°C per 15-20 minuti) + 150g di Fagioli borlotti in scatola (sciacquati) + 2 cucchiai e mezzo di Olio EVO (25g) per condire patate e fagioli." }
+            ],
+            "Martedì": [
+                { id: "t_mar_col", tipo: "Colazione", desc: "2 Uova intere strapazzate + 2 fette di Pane Integrale tostato (60g) + 15g di Mandorle + 1 Banana media." },
+                { id: "t_mar_pra", tipo: "Pranzo", desc: "80g di Pasta Integrale con Petto di pollo a cubetti (130g) cotto prima in friggitrice ad aria + Insalata mista abbondante + 1 cucchiaio e mezzo di Olio EVO (15g)." },
+                { id: "t_mar_cen", tipo: "Cena", desc: "Filetto di merluzzo o pesce bianco surgelato (170g) buttato direttamente in friggitrice ad aria (190°C per 15 minuti) + Patate a cubetti con la buccia (150g) in friggitrice ad aria + 150g di Fagioli cannellini in scatola (sciacquati) + 3 cucchiai e mezzo di Olio EVO (35g - aumentiamo l'olio perché il merluzzo è molto magro)." }
+            ],
+            "Mercoledì": [
+                { id: "t_mer_col", tipo: "Colazione", desc: "2 Uova intere strapazzate + 2 fette di Pane Integrale tostato (60g) + 15g di Mandorle + 1 Mela grande con la buccia." },
+                { id: "t_mer_pra", tipo: "Pranzo", desc: "80g di Pasta Integrale con 120g di Tonno al naturale e salsa + Zucchine in friggitrice ad aria (200g) + 1 cucchiaio e mezzo di Olio EVO (15g)." },
+                { id: "t_mer_cen", tipo: "Cena", desc: "Petto di pollo intero (150g) speziato e cotto in friggitrice ad aria (190°C per 15 minuti) + Patate a cubetti con la buccia (150g) in friggitrice ad aria + 150g di Fagioli borlotti in scatola + 3 cucchiai di Olio EVO (30g)." }
+            ],
+            "Giovedì": [
+                { id: "t_gio_col", tipo: "Colazione", desc: "2 Uova intere strapazzate + 2 fette di Pane Integrale tostato (60g) + 15g di Mandorle + 1 Banana media." },
+                { id: "t_gio_pra", tipo: "Pranzo", desc: "80g di Pasta Integrale condita con passata di pomodoro e 1 cucchiaio di pecorino + 1 Hamburger di carne rossa magra (120g) al volo in friggitrice ad aria + 1 cucchiaio e mezzo di Olio EVO (15g)." },
+                { id: "t_gio_cen", tipo: "Cena", desc: "Filetto di merluzzo (170g) in friggitrice ad aria + Patate a cubetti con la buccia (150g) in friggitrice ad aria + Insalata mista + 3 cucchiai e mezzo di Olio EVO (35g)." }
+            ],
+            "Venerdì": [
+                { id: "t_ven_col", tipo: "Colazione", desc: "2 Uova intere strapazzate + 2 fette di Pane Integrale tostato (60g) + 15g di Mandorle + 1 Mela grande con la buccia." },
+                { id: "t_ven_pra", tipo: "Pranzo", desc: "80g di Pasta Integrale con 120g di Tonno al naturale + Zucchine in friggitrice ad aria (200g) + 1 cucchiaio e mezzo di Olio EVO (15g)." },
+                { id: "t_ven_cen", tipo: "Cena", desc: "1 Hamburger di carne rossa magra (150g) in friggitrice ad aria + 150g di Fagioli cannellini in scatola + Patate a cubetti con la buccia (150g) in friggitrice ad aria + 2 cucchiai e mezzo di Olio EVO (25g)." }
+            ],
+            "Sabato": [
+                { id: "t_sab_col", tipo: "Colazione", desc: "2 Uova intere strapazzate + 2 fette di Pane Integrale tostato (60g) + 15g di Mandorle + 1 Banana media." },
+                { id: "t_sab_pra", tipo: "Pranzo", desc: "80g di Pasta Integrale con Petto di pollo a cubetti (130g) in friggitrice ad aria + Zucchine in friggitrice ad aria (200g) + 1 cucchiaio e mezzo di Olio EVO (15g)." },
+                { id: "t_sab_cen", tipo: "Cena", desc: "Petto di pollo intero (150g) in friggitrice ad aria + Patate a cubetti con la buccia (150g) in friggitrice ad aria + 150g di Fagioli borlotti in scatola + 3 cucchiai di Olio EVO (30g)." }
+            ],
+            "Domenica": [
+                { id: "t_dom_col", tipo: "Colazione", desc: "2 Uova intere strapazzate + 2 fette di Pane Integrale tostato (60g) + 15g di Mandorle + 1 Mela grande con la buccia." },
+                { id: "t_dom_pra", tipo: "Pranzo", desc: "80g di Pasta Integrale con Tonno (120g) o sugo semplice + Insalata mista + 1 cucchiaio e mezzo di Olio EVO (15g)." },
+                { id: "t_dom_cen", skin: "Cena", desc: "1 Hamburger di carne rossa magra (150g) in friggitrice ad aria + Patate a cubetti con la buccia (150g) in friggitrice ad aria + 150g di Fagioli cannellini in scatola + 2 cucchiai e mezzo di Olio EVO (25g)." }
+            ]
+        };
+
+        const giorniSettimana = ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
+        const oggi = new Date();
+        const nomeGiornoOggi = giorniSettimana[oggi.getDay()];
+        const stringaDataOggi = oggi.toISOString().split('T')[0];
+
+        document.getElementById("live-day-badge").innerText = nomeGiornoOggi;
+
+        const pastiDelGiorno = dietaTeo[nomeGiornoOggi] || [];
+        const container = document.getElementById("pasti-container");
+        const docRef = doc(db, "diete", "teo"); // Collezione e documento per Teo
+
+        async function initApp() {
+            let statiCheckbox = {};
+
+            try {
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    const datiCloud = docSnap.data();
+                    if (datiCloud.last_date !== stringaDataOggi) {
+                        await setDoc(docRef, { last_date: stringaDataOggi, pasti: {} });
+                    } else {
+                        statiCheckbox = datiCloud.pasti || {};
+                    }
+                } else {
+                    await setDoc(docRef, { last_date: stringaDataOggi, pasti: {} });
+                }
+            } catch (e) {
+                console.log("Firestore offline o configurazione mancante.");
+            }
+
+            pastiDelGiorno.forEach(pasto => {
+                const isChecked = statiCheckbox[pasto.id] || false;
+                
+                const card = document.createElement("div");
+                card.id = `card-${pasto.id}`;
+                card.className = `pasto-card ${isChecked ? 'completed' : ''}`;
+                
+                card.innerHTML = `
+                    <div class="pasto-content">
+                        <span class="pasto-label">${pasto.tipo || "Cena"}</span>
+                        <span class="pasto-desc">${pasto.desc}</span>
+                    </div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="${pasto.id}" ${isChecked ? 'checked' : ''}>
+                        <span class="custom-checkmark"></span>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+
+                const input = card.querySelector('input');
+                input.addEventListener('change', async (e) => {
+                    const checked = e.target.checked;
+                    if(checked) {
+                        card.classList.add('completed');
+                    } else {
+                        card.classList.remove('completed');
+                    }
+                    
+                    try {
+                        await updateDoc(docRef, {
+                            [`pasti.${pasto.id}`]: checked
+                        });
+                    } catch(err) {
+                        console.error("Errore salvataggio Firebase:", err);
+                    }
+                });
+            });
+        }
+
+        initApp();
+    </script>
+</body>
+</html>

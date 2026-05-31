@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Cesca — Diet Tracker</title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-deep: #030f0f;
+            --accent: #00df82;
+            --white: #ffffff;
+            --card-bg: #0a1a1a;
+            --border: #142b2b;
+            --text-muted: #526b6b;
+            
+            --safe-top: env(safe-area-inset-top, 20px);
+            --safe-bottom: env(safe-area-inset-bottom, 20px);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--white);
+            min-height: 100vh;
+            padding: calc(var(--safe-top) + 24px) 24px calc(var(--safe-bottom) + 30px) 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- NAVIGATION UPPER BAR --- */
+        .nav-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .back-btn {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            transition: color 0.2s ease;
+        }
+
+        .back-btn:active {
+            color: var(--accent);
+        }
+
+        .day-badge {
+            background: rgba(0, 223, 130, 0.08);
+            border: 1px solid rgba(0, 223, 130, 0.2);
+            color: var(--accent);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .profile-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 32px;
+            text-transform: uppercase;
+        }
+
+        /* --- LISTA PASTI --- */
+        .pasti-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .pasto-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 24px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .pasto-content {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .pasto-label {
+            font-size: 0.7rem;
+            color: var(--accent);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pasto-desc {
+            font-size: 0.95rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        /* --- PREMIUM CHECKBOX --- */
+        .checkbox-container {
+            position: relative;
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+        }
+
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .custom-checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 32px;
+            width: 32px;
+            background: transparent;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-container input:checked ~ .custom-checkmark {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 12px rgba(0, 223, 130, 0.3);
+        }
+
+        .custom-checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 10px;
+            top: 5px;
+            width: 6px;
+            height: 13px;
+            border: solid var(--bg-deep);
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
+        }
+
+        .checkbox-container input:checked ~ .custom-checkmark:after {
+            display: block;
+        }
+
+        /* --- STATUS COMPLETATO --- */
+        .pasto-card.completed {
+            opacity: 0.35;
+            border-color: transparent;
+            background: #050d0d;
+        }
+
+        .pasto-card.completed .pasto-desc {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-top">
+        <a href="index.html" class="back-btn">← Home</a>
+        <span id="live-day-badge" class="day-badge">Caricamento...</span>
+    </div>
+
+    <h1 class="profile-title">Cesca</h1>
+
+    <div id="pasti-container" class="pasti-flow"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Verrà configurato nel prossimo step
+        const firebaseConfig = {
+            apiKey: "AIzaSyDD9XmvP6FtXHZPfhrDQnOwtaHvFvIopt4",
+            authDomain: "webapp-dieta.firebaseapp.com",
+            projectId: "webapp-dieta",
+            storageBucket: "webapp-dieta.firebasestorage.app",
+            messagingSenderId: "345168120014",
+            appId: "1:345168120014:web:5ec1f5ef2f87f7eb3d289f"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Database Dieta Statica di Cesca
+        const dietaCesca = {
+            "Lunedì": [
+                { id: "c_lun_col", tipo: "Colazione", desc: "2 Brioscine confezionate + 4 Biscotti (tipo Gocciole o Macine)." },
+                { id: "c_lun_pra", tipo: "Pranzo", desc: "Pasta al tonno (80g di pasta + 1 lattina di tonno grande da 120g + salsa di pomodoro + 1 cucchiaio e mezzo di olio EVO a crudo)." },
+                { id: "c_lun_mer", tipo: "Merenda", desc: "1 pacchetto di Croccantelle + 1 Brioscina." },
+                { id: "c_lun_cen", tipo: "Cena", desc: "Pollo (150g, meglio sovracosce) + Patate al forno (200g) + Insalata condita con 1 cucchiaio di olio EVO." },
+                { id: "c_lun_spu", tipo: "Spuntino", desc: "1 Panino (60g di pane) con 40g di Salame." }
+            ],
+            "Martedì": [
+                { id: "c_mar_col", tipo: "Colazione", desc: "Panino al volo (60g di pane) con 40g di Salame e 30g di Provola." },
+                { id: "c_mar_pra", tipo: "Pranzo", desc: "Pasta alla Carbonara (80g di pasta + 30g di guanciale + 1 uovo + 2 cucchiai di pecorino)." },
+                { id: "c_mar_mer", tipo: "Merenda", desc: "Una coppetta media di Gelato artigianale (circa 150g, gusti crema/cioccolato)." },
+                { id: "c_mar_cen", tipo: "Cena", desc: "Hamburger o bistecca di carne rossa (150g) + Fagiolini conditi con 2 cucchiai di olio EVO." },
+                { id: "c_mar_spu", tipo: "Spuntino", desc: "6 Biscotti golosi." }
+            ],
+            "Mercoledì": [
+                { id: "c_mer_col", tipo: "Colazione", desc: "8 Biscotti (da mangiare al volo)." },
+                { id: "c_mer_pra", tipo: "Pranzo", desc: "1 Piadina intera (circa 120g) con 50g di Salame e 40g di Provola." },
+                { id: "c_mer_mer", tipo: "Merenda", desc: "1 pacchetto di Croccantelle + 2 Biscotti." },
+                { id: "c_mer_cen", tipo: "Cena", desc: "Pollo (150g) + Patate al forno (200g condite con 1 cucchiaio e mezzo di olio EVO) + Cetrioli a piacere." },
+                { id: "c_mer_spu", tipo: "Spuntino", desc: "1 Brioscina confezionata." }
+            ],
+            "Giovedì": [
+                { id: "c_gio_col", tipo: "Colazione", desc: "2 Brioscine confezionate + 4 Biscotti." },
+                { id: "c_gio_pra", tipo: "Pranzo", desc: "Pasta al tonno (80g di pasta + 1 lattina di tonno + salsa + 1 cucchiaio e mezzo di olio EVO)." },
+                { id: "c_gio_mer", tipo: "Merenda", desc: "Una coppetta media di Gelato artigianale + 1 pacchetto di Croccantelle." },
+                { id: "c_gio_cen", tipo: "Cena", desc: "Carne rossa (150g) + Fagiolini conditi con 2 cucchiai di olio EVO." },
+                { id: "c_gio_spu", tipo: "Spuntino", desc: "1 Panino (60g di pane) con 40g di Salame." }
+            ],
+            "Venerdì": [
+                { id: "c_ven_col", tipo: "Colazione", desc: "Panino al volo (60g di pane) con 40g di Salame e 30g di Provola." },
+                { id: "c_ven_pra", tipo: "Pranzo", desc: "Pasta alla Carbonara (80g di pasta + 30g di guanciale + 1 uovo + pecorino)." },
+                { id: "c_ven_mer", tipo: "Merenda", desc: "1 Brioscina + 3 Biscotti." },
+                { id: "c_ven_cen", tipo: "Cena", desc: "1 Pizza margherita intera (con salame o provola aggiunta sopra)." },
+                { id: "c_ven_spu", tipo: "Spuntino", desc: "1 pacchetto di Croccantelle." }
+            ],
+            "Sabato": [
+                { id: "c_sab_col", tipo: "Colazione", desc: "8 Biscotti." },
+                { id: "c_sab_pra", tipo: "Pranzo", desc: "1 Piadina intera con 50g di Salame e 40g di Provola." },
+                { id: "c_sab_mer", tipo: "Merenda", desc: "Una coppetta media di Gelato artigianale." },
+                { id: "c_sab_cen", tipo: "Cena", desc: "Carne rossa (150g) + Patate in padella (200g) + Insalata condita con 1 cucchiaio di olio EVO." },
+                { id: "c_sab_spu", tipo: "Spuntino", desc: "1 Panino (60g di pane) con 40g di Salame." }
+            ],
+            "Domenica": [
+                { id: "c_dom_col", tipo: "Colazione", desc: "2 Brioscine confezionate + 4 Biscotti." },
+                { id: "c_dom_pra", tipo: "Pranzo", desc: "Il suo primo preferito (Pasta al tonno o Carbonara, sempre 80g di pasta)." },
+                { id: "c_dom_mer", tipo: "Merenda", desc: "1 pacchetto di Croccantelle + 1 Brioscina." },
+                { id: "c_dom_cen", tipo: "Cena", desc: "2 Uova (all'occhio di bue o frittata) + Patate (200g) + Cetriolini a piacere." },
+                { id: "c_dom_spu", tipo: "Spuntino", desc: "6 Biscotti." }
+            ]
+        };
+
+        const giorniSettimana = ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
+        const oggi = new Date();
+        const nomeGiornoOggi = giorniSettimana[oggi.getDay()];
+        const stringaDataOggi = oggi.toISOString().split('T')[0]; // Genera formato YYYY-MM-DD
+
+        // Aggiorna l'interfaccia con il giorno corrente
+        document.getElementById("live-day-badge").innerText = nomeGiornoOggi;
+
+        const pastiDelGiorno = dietaCesca[nomeGiornoOggi] || [];
+        const container = document.getElementById("pasti-container");
+        const docRef = doc(db, "diete", "cesca");
+
+        async function initApp() {
+            let statiCheckbox = {};
+
+            try {
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    const datiCloud = docSnap.data();
+                    // CONTROLLO RESET: Se la data salvata è diversa da oggi, resetta il cloud
+                    if (datiCloud.last_date !== stringaDataOggi) {
+                        await setDoc(docRef, { last_date: stringaDataOggi, pasti: {} });
+                    } else {
+                        statiCheckbox = datiCloud.pasti || {};
+                    }
+                } else {
+                    // Primo avvio assoluto del database
+                    await setDoc(docRef, { last_date: stringaDataOggi, pasti: {} });
+                }
+            } catch (e) {
+                console.log("Firebase non configurato o offline. Uso della memoria locale temporanea.");
+            }
+
+            // Renderizza i pasti a schermo
+            pastiDelGiorno.forEach(pasto => {
+                const isChecked = statiCheckbox[pasto.id] || false;
+                
+                const card = document.createElement("div");
+                card.id = `card-${pasto.id}`;
+                card.className = `pasto-card ${isChecked ? 'completed' : ''}`;
+                
+                card.innerHTML = `
+                    <div class="pasto-content">
+                        <span class="pasto-label">${pasto.tipo}</span>
+                        <span class="pasto-desc">${pasto.desc}</span>
+                    </div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="${pasto.id}" ${isChecked ? 'checked' : ''}>
+                        <span class="custom-checkmark"></span>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+
+                // Event listener per salvare i dati al click
+                const input = card.querySelector('input');
+                input.addEventListener('change', async (e) => {
+                    const checked = e.target.checked;
+                    if(checked) {
+                        card.classList.add('completed');
+                    } else {
+                        card.classList.remove('completed');
+                    }
+                    
+                    // Update su Firebase
+                    try {
+                        await updateDoc(docRef, {
+                            [`pasti.${pasto.id}`]: checked
+                        });
+                    } catch(err) {
+                        console.error("Errore salvataggio Firebase:", err);
+                    }
+                });
+            });
+        }
+
+        initApp();
+    </script>
+</body>
+</html>
