@@ -40,7 +40,7 @@
             padding: calc(var(--safe-top) + 24px) 24px calc(var(--safe-bottom) + 30px) 24px;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden; /* Blocca tassativamente lo scorrimento orizzontale */
+            overflow-x: hidden;
         }
 
         /* --- NAV BAR --- */
@@ -58,11 +58,6 @@
             text-transform: uppercase;
             letter-spacing: 1.5px;
             font-weight: 700;
-            transition: color 0.2s ease;
-        }
-
-        .back-btn:hover, .back-btn:active {
-            color: var(--accent);
         }
 
         .day-badge-trigger {
@@ -79,12 +74,6 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .day-badge-trigger:active {
-            transform: scale(0.95);
-            background: rgba(0, 223, 130, 0.15);
         }
 
         .profile-title {
@@ -95,7 +84,6 @@
             text-transform: uppercase;
         }
 
-        /* Banner Stato Sola Lettura */
         .read-only-banner {
             background: rgba(239, 68, 68, 0.08);
             border: 1px solid rgba(239, 68, 68, 0.2);
@@ -108,7 +96,6 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            animation: fadeIn 0.3s ease;
         }
 
         /* --- LISTA PASTI --- */
@@ -128,17 +115,15 @@
             align-items: center;
             justify-content: space-between;
             gap: 16px;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
             width: 100%;
         }
 
         .pasto-main-content {
+            flex: 1;
+            min-width: 0; /* Forza il contenitore a non espandersi */
             display: flex;
             flex-direction: column;
             gap: 14px;
-            flex: 1;
-            min-width: 0; /* CRITICO: Impedisce alla card di allargarsi oltre lo schermo su iOS */
         }
 
         .pasto-label {
@@ -149,28 +134,37 @@
             letter-spacing: 1.5px;
         }
 
-        /* Lista Alimenti Interna */
         .alimenti-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
             width: 100%;
         }
 
+        /* STRUTTURA GRID BLOCCHETTO PER IPHONE */
         .alimento-row {
-            display: flex;
+            display: grid;
+            grid-template-columns: minmax(0, max-content) 1fr max-content;
             align-items: center;
             width: 100%;
             font-size: 0.95rem;
             color: rgba(255, 255, 255, 0.95);
-            min-width: 0; /* CRITICO: Forza il rispetto dei confini della riga */
+        }
+
+        /* Blocco testo di sinistra */
+        .alimento-left-block {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
 
         .alimento-dot {
             color: var(--accent);
             font-size: 1.2rem;
             margin-right: 8px;
-            line-height: 1;
             flex-shrink: 0;
         }
 
@@ -182,31 +176,26 @@
 
         .alimento-nome {
             font-weight: 500;
-            white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis; /* Attiva correttamente i tre puntini se il nome è troppo lungo */
-            flex-shrink: 1;
-            min-width: 0; /* CRITICO: Dice a WebKit che il testo può rimpicciolirsi */
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
-        /* Tratteggio Leader-dots */
+        /* Linea di separazione tratteggiata centrale */
         .alimento-leader {
-            flex-grow: 1;
-            flex-shrink: 1;
-            min-width: 10px; /* Garantisce che i puntini non spariscano mai del tutto */
             border-bottom: 2px dotted rgba(82, 107, 107, 0.35);
-            margin: 0 10px;
-            position: relative;
-            top: -2px;
-            height: 1px;
+            margin: 0 8px;
+            height: 12px; /* Allinea perfettamente al centro del testo */
+            align-self: start;
         }
 
+        /* Blocco quantità fisso a destra */
         .alimento-quantita {
             font-weight: 600;
             color: rgba(255, 255, 255, 0.85);
             font-size: 0.9rem;
-            flex-shrink: 0;
             text-align: right;
+            white-space: nowrap;
         }
 
         /* --- CHECKBOX PREMIUM --- */
@@ -226,10 +215,6 @@
             z-index: 2;
         }
 
-        .checkbox-container input:disabled {
-            cursor: not-allowed;
-        }
-
         .custom-checkmark {
             position: absolute;
             top: 0;
@@ -239,7 +224,7 @@
             background: transparent;
             border: 2px solid var(--border);
             border-radius: 12px;
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.2s ease;
         }
 
         .checkbox-container input:checked ~ .custom-checkmark {
@@ -265,7 +250,6 @@
             display: block;
         }
 
-        /* Stato completato */
         .pasto-card.completed {
             opacity: 0.35;
             border-color: transparent;
@@ -277,7 +261,7 @@
             color: var(--text-muted);
         }
 
-        /* --- FINESTRE MODALI (OVERLAYS) --- */
+        /* --- FINESTRE MODALI --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -293,7 +277,7 @@
             z-index: 1000;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.3s ease;
             padding: 20px;
         }
 
@@ -310,9 +294,8 @@
             border-radius: 28px;
             padding: 28px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-            transform: translateY(30px);
-            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
         }
 
         .modal-overlay.active .modal-card {
@@ -329,7 +312,6 @@
         .modal-header h3 {
             font-size: 1.15rem;
             font-weight: 800;
-            letter-spacing: 0.5px;
             text-transform: uppercase;
         }
 
@@ -339,15 +321,8 @@
             color: var(--text-muted);
             font-size: 1.8rem;
             cursor: pointer;
-            line-height: 1;
-            transition: color 0.2s;
         }
 
-        .modal-close-btn:hover {
-            color: var(--white);
-        }
-
-        /* Lista Giorni */
         .day-list {
             display: flex;
             flex-direction: column;
@@ -363,8 +338,6 @@
             font-size: 1rem;
             font-weight: 600;
             text-align: left;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -374,16 +347,6 @@
             border-color: var(--accent);
             color: var(--accent);
             background: rgba(0, 223, 130, 0.05);
-        }
-
-        .day-option:active {
-            transform: scale(0.98);
-            background: rgba(0, 223, 130, 0.1);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -431,46 +394,45 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Database Dieta Statica di Cesca Strutturato ad Oggetti singoli
         const dietaCesca = {
             "Lunedì": [
                 {
                     id: "c_lun_col", tipo: "Colazione",
                     alimenti: [
-                        { emoji: "🥐", nome: "Brioscine confezionate", quantita: "2 pz" },
-                        { emoji: "🍪", nome: "Biscotti Macine o Gocciole", quantita: "4 pz" }
+                        { emoji: "🥐", nome: "Brioscine", quantita: "2 pz" },
+                        { emoji: "🍪", nome: "Biscotti", quantita: "4 pz" }
                     ]
                 },
                 {
                     id: "c_lun_pra", tipo: "Pranzo",
                     alimenti: [
                         { emoji: "🍝", nome: "Pasta", quantita: "80g" },
-                        { emoji: "🐟", nome: "Tonno al naturale", quantita: "120g" },
-                        { emoji: "🍅", nome: "Salsa di pomodoro", quantita: "q.b." },
-                        { emoji: "🫒", nome: "Olio EVO", quantita: "1,5 cucchiai" }
+                        { emoji: "🐟", nome: "Tonno", quantita: "120g" },
+                        { emoji: "🍅", nome: "Salsa", quantita: "q.b." },
+                        { emoji: "🫒", nome: "Olio", quantita: "1,5 cucchiai" }
                     ]
                 },
                 {
                     id: "c_lun_mer", tipo: "Merenda",
                     alimenti: [
-                        { emoji: "🍿", nome: "Croccantelle", quantita: "1 pacchetto" },
+                        { emoji: "🍿", nome: "Croccantelle", quantita: "1 pz" },
                         { emoji: "🥐", nome: "Brioscina", quantita: "1 pz" }
                     ]
                 },
                 {
                     id: "c_lun_cen", tipo: "Cena",
                     alimenti: [
-                        { emoji: "🍗", nome: "Pollo sovracosce", quantita: "150g" },
-                        { emoji: "🥔", nome: "Patate al forno", quantita: "200g" },
-                        { emoji: "🥗", nome: "Insalata mista", quantita: "q.b." },
-                        { emoji: "🫒", nome: "Olio EVO", quantita: "1 cucchiaio" }
+                        { emoji: "🍗", nome: "Pollo", quantita: "150g" },
+                        { emoji: "🥔", nome: "Patate", quantita: "200g" },
+                        { emoji: "🥗", nome: "Insalata", quantita: "q.b." },
+                        { emoji: "🫒", nome: "Olio", quantita: "1 cucchiaio" }
                     ]
                 },
                 {
                     id: "c_lun_spu", tipo: "Spuntino",
                     alimenti: [
                         { emoji: "🥪", nome: "Panino", quantita: "60g" },
-                        { emoji: "🥓", nome: "Salame crudo", quantita: "40g" }
+                        { emoji: "🥓", nome: "Salame", quantita: "40g" }
                     ]
                 }
             ],
@@ -478,38 +440,38 @@
                 {
                     id: "c_mar_col", tipo: "Colazione",
                     alimenti: [
-                        { emoji: "🥪", nome: "Panino al volo", quantita: "60g" },
-                        { emoji: "🥓", nome: "Salame crudo", quantita: "40g" },
+                        { emoji: "🥪", nome: "Panino", quantita: "60g" },
+                        { emoji: "🥓", nome: "Salame", quantita: "40g" },
                         { emoji: "🧀", nome: "Provola", quantita: "30g" }
                     ]
                 },
                 {
                     id: "c_mar_pra", tipo: "Pranzo",
                     alimenti: [
-                        { emoji: "🍝", nome: "Pasta alla Carbonara", quantita: "80g" },
+                        { emoji: "🍝", nome: "Carbonara", quantita: "80g" },
                         { emoji: "🥓", nome: "Guanciale", quantita: "30g" },
-                        { emoji: "🥚", nome: "Uovo intero", quantita: "1 pz" },
+                        { emoji: "🥚", nome: "Uovo", quantita: "1 pz" },
                         { emoji: "🧀", nome: "Pecorino", quantita: "2 cucchiai" }
                     ]
                 },
                 {
                     id: "c_mar_mer", tipo: "Merenda",
                     alimenti: [
-                        { emoji: "🍦", nome: "Gelato artigianale (crema/cioccol.)", quantita: "150g" }
+                        { emoji: "🍦", nome: "Gelato", quantita: "150g" }
                     ]
                 },
                 {
                     id: "c_mar_cen", tipo: "Cena",
                     alimenti: [
-                        { emoji: "🥩", nome: "Hamburger o bistecca carne rossa", quantita: "150g" },
-                        { emoji: "🥬", nome: "Fagiolini verdi", quantita: "q.b." },
-                        { emoji: "🫒", nome: "Olio EVO", quantita: "2 cucchiai" }
+                        { emoji: "🥩", nome: "Carne rossa", quantita: "150g" },
+                        { emoji: "🥬", nome: "Fagiolini", quantita: "q.b." },
+                        { emoji: "🫒", nome: "Olio", quantita: "2 cucchiai" }
                     ]
                 },
                 {
                     id: "c_mar_spu", tipo: "Spuntino",
                     alimenti: [
-                        { emoji: "🍪", nome: "Biscotti golosi", quantita: "6 pz" }
+                        { emoji: "🍪", nome: "Biscotti", quantita: "6 pz" }
                     ]
                 }
             ],
@@ -517,21 +479,21 @@
                 {
                     id: "c_mer_col", tipo: "Colazione",
                     alimenti: [
-                        { emoji: "🍪", nome: "Biscotti (al volo)", quantita: "8 pz" }
+                        { emoji: "🍪", nome: "Biscotti", quantita: "8 pz" }
                     ]
                 },
                 {
                     id: "c_mer_pra", tipo: "Pranzo",
                     alimenti: [
-                        { emoji: "🫓", nome: "Piadina intera", quantita: "120g" },
-                        { emoji: "🥓", nome: "Salame crudo", quantita: "50g" },
+                        { emoji: "🫓", nome: "Piadina", quantita: "120g" },
+                        { emoji: "🥓", nome: "Salame", quantita: "50g" },
                         { emoji: "🧀", nome: "Provola", quantita: "40g" }
                     ]
                 },
                 {
                     id: "c_mer_mer", tipo: "Merenda",
                     alimenti: [
-                        { emoji: "🍿", nome: "Croccantelle", quantita: "1 pacchetto" },
+                        { emoji: "🍿", nome: "Croccantelle", quantita: "1 pz" },
                         { emoji: "🍪", nome: "Biscotti", quantita: "2 pz" }
                     ]
                 },
@@ -539,15 +501,15 @@
                     id: "c_mer_cen", tipo: "Cena",
                     alimenti: [
                         { emoji: "🍗", nome: "Pollo", quantita: "150g" },
-                        { emoji: "🥔", nome: "Patate al forno", quantita: "200g" },
-                        { emoji: "🫒", nome: "Olio EVO", quantita: "1,5 cucchiai" },
+                        { emoji: "🥔", nome: "Patate", quantita: "200g" },
+                        { emoji: "🫒", nome: "Olio", quantita: "1,5 cucchiai" },
                         { emoji: "🥒", nome: "Cetrioli", quantita: "a piacere" }
                     ]
                 },
                 {
                     id: "c_mer_spu", tipo: "Spuntino",
                     alimenti: [
-                        { emoji: "🥐", nome: "Brioscina confezionata", quantita: "1 pz" }
+                        { emoji: "🥐", nome: "Brioscina", quantita: "1 pz" }
                     ]
                 }
             ],
@@ -555,7 +517,7 @@
                 {
                     id: "c_gio_col", tipo: "Colazione",
                     alimenti: [
-                        { emoji: "🥐", nome: "Brioscine confezionate", quantita: "2 pz" },
+                        { emoji: "🥐", nome: "Brioscine", quantita: "2 pz" },
                         { emoji: "🍪", nome: "Biscotti", quantita: "4 pz" }
                     ]
                 },
@@ -563,31 +525,31 @@
                     id: "c_gio_pra", tipo: "Pranzo",
                     alimenti: [
                         { emoji: "🍝", nome: "Pasta", quantita: "80g" },
-                        { emoji: "🐟", nome: "Tonno al naturale", quantita: "120g" },
-                        { emoji: "🍅", nome: "Salsa di pomodoro", quantita: "q.b." },
-                        { emoji: "🫒", nome: "Olio EVO", quantita: "1,5 cucchiai" }
+                        { emoji: "🐟", nome: "Tonno", quantita: "120g" },
+                        { emoji: "🍅", nome: "Salsa", quantita: "q.b." },
+                        { emoji: "🫒", nome: "Olio", quantita: "1,5 cucchiai" }
                     ]
                 },
                 {
                     id: "c_gio_mer", tipo: "Merenda",
                     alimenti: [
-                        { emoji: "🍦", nome: "Gelato artigianale", quantita: "150g" },
-                        { emoji: "🍿", nome: "Croccantelle", quantita: "1 pacchetto" }
+                        { emoji: "🍦", nome: "Gelato", quantita: "150g" },
+                        { emoji: "🍿", nome: "Croccantelle", quantita: "1 pz" }
                     ]
                 },
                 {
                     id: "c_gio_cen", tipo: "Cena",
                     alimenti: [
-                        { emoji: "🥩", nome: "Carne rossa magra", quantita: "150g" },
-                        { emoji: "🥬", nome: "Fagiolini verdi", quantita: "q.b." },
-                        { emoji: "🫒", nome: "Olio EVO", quantita: "2 cucchiai" }
+                        { emoji: "🥩", nome: "Carne rossa", quantita: "150g" },
+                        { emoji: "🥬", nome: "Fagiolini", quantita: "q.b." },
+                        { emoji: "🫒", nome: "Olio", quantita: "2 cucchiai" }
                     ]
                 },
                 {
                     id: "c_gio_spu", tipo: "Spuntino",
                     alimenti: [
                         { emoji: "🥪", nome: "Panino", quantita: "60g" },
-                        { emoji: "🥓", nome: "Salame crudo", quantita: "40g" }
+                        { emoji: "🥓", nome: "Salame", quantita: "40g" }
                     ]
                 }
             ],
@@ -595,15 +557,15 @@
                 {
                     id: "c_ven_col", tipo: "Colazione",
                     alimenti: [
-                        { emoji: "🥪", nome: "Panino al volo", quantita: "60g" },
-                        { emoji: "🥓", nome: "Salame crudo", quantita: "40g" },
+                        { emoji: "🥪", nome: "Panino", quantita: "60g" },
+                        { emoji: "🥓", nome: "Salame", quantita: "40g" },
                         { emoji: "🧀", nome: "Provola", quantita: "30g" }
                     ]
                 },
                 {
                     id: "c_ven_pra", tipo: "Pranzo",
                     alimenti: [
-                        { emoji: "🍝", nome: "Pasta alla Carbonara", quantita: "80g" },
+                        { emoji: "🍝", nome: "Carbonara", quantita: "80g" },
                         { emoji: "🥓", nome: "Guanciale", quantita: "30g" },
                         { emoji: "🥚", nome: "Uovo", quantita: "1 pz" },
                         { emoji: "🧀", nome: "Pecorino", quantita: "q.b." }
@@ -619,14 +581,14 @@
                 {
                     id: "c_ven_cen", tipo: "Cena",
                     alimenti: [
-                        { emoji: "🍕", nome: "Pizza margherita intera", quantita: "1 pz" },
-                        { emoji: "➕", nome: "Aggiunta salame/provola sopra", quantita: "q.b." }
+                        { emoji: "🍕", nome: "Pizza", quantita: "1 pz" },
+                        { emoji: "➕", nome: "Salame-provola", quantita: "q.b." }
                     ]
                 },
                 {
                     id: "c_ven_spu", tipo: "Spuntino",
                     alimenti: [
-                        { emoji: "🍿", nome: "Croccantelle", quantita: "1 pacchetto" }
+                        { emoji: "🍿", nome: "Croccantelle", quantita: "1 pz" }
                     ]
                 }
             ],
@@ -640,31 +602,31 @@
                 {
                     id: "c_sab_pra", tipo: "Pranzo",
                     alimenti: [
-                        { emoji: "🫓", nome: "Piadina intera", quantita: "120g" },
-                        { emoji: "🥓", nome: "Salame crudo", quantita: "50g" },
+                        { emoji: "🫓", nome: "Piadina", quantita: "1 pz" },
+                        { emoji: "🥓", nome: "Salame", quantita: "50g" },
                         { emoji: "🧀", nome: "Provola", quantita: "40g" }
                     ]
                 },
                 {
                     id: "c_sab_mer", tipo: "Merenda",
                     alimenti: [
-                        { emoji: "🍦", nome: "Gelato artigianale", quantita: "150g" }
+                        { emoji: "🍦", nome: "Gelato", quantita: "150g" }
                     ]
                 },
                 {
                     id: "c_sab_cen", tipo: "Cena",
                     alimenti: [
                         { emoji: "🥩", nome: "Carne rossa", quantita: "150g" },
-                        { emoji: "🥔", nome: "Patate in padella", quantita: "200g" },
-                        { emoji: "🥗", nome: "Insalata mista", quantita: "q.b." },
-                        { emoji: "🫒", nome: "Olio EVO", quantita: "1 cucchiaio" }
+                        { emoji: "🥔", nome: "Patate", quantita: "200g" },
+                        { emoji: "🥗", nome: "Insalata", quantita: "q.b." },
+                        { emoji: "🫒", nome: "Olio", quantita: "1 cucchiaio" }
                     ]
                 },
                 {
                     id: "c_sab_spu", tipo: "Spuntino",
                     alimenti: [
                         { emoji: "🥪", nome: "Panino", quantita: "60g" },
-                        { emoji: "🥓", nome: "Salame crudo", quantita: "40g" }
+                        { emoji: "🥓", nome: "Salame", quantita: "40g" }
                     ]
                 }
             ],
@@ -672,27 +634,27 @@
                 {
                     id: "c_dom_col", tipo: "Colazione",
                     alimenti: [
-                        { emoji: "🥐", nome: "Brioscine confezionate", quantita: "2 pz" },
+                        { emoji: "🥐", nome: "Brioscine", quantita: "2 pz" },
                         { emoji: "🍪", nome: "Biscotti", quantita: "4 pz" }
                     ]
                 },
                 {
                     id: "c_dom_pra", tipo: "Pranzo",
                     alimenti: [
-                        { emoji: "🍝", nome: "Primo preferito (Tonno/Carbonara)", quantita: "80g pasta" }
+                        { emoji: "🍝", nome: "Pasta prefe", quantita: "80g" }
                     ]
                 },
                 {
                     id: "c_dom_mer", tipo: "Merenda",
                     alimenti: [
-                        { emoji: "🍿", nome: "Croccantelle", quantita: "1 pacchetto" },
+                        { emoji: "🍿", nome: "Croccantelle", quantita: "1 pz" },
                         { emoji: "🥐", nome: "Brioscina", quantita: "1 pz" }
                     ]
                 },
                 {
                     id: "c_dom_cen", tipo: "Cena",
                     alimenti: [
-                        { emoji: "🥚", nome: "Uova (occhio bue o frittata)", quantita: "2 pz" },
+                        { emoji: "🥚", nome: "Uova", quantita: "2 pz" },
                         { emoji: "🥔", nome: "Patate", quantita: "200g" },
                         { emoji: "🥒", nome: "Cetriolini", quantita: "a piacere" }
                     ]
@@ -801,11 +763,13 @@
                 pasto.alimenti.forEach(alimento => {
                     alimentiHTML += `
                         <div class="alimento-row">
-                            <span class="alimento-dot">•</span>
-                            <span class="alimento-emoji">${alimento.emoji}</span>
-                            <span class="alimento-nome">${alimento.nome}</span>
-                            <span class="alimento-leader"></span>
-                            <span class="alimento-quantita">${alimento.quantita}</span>
+                            <div class="alimento-left-block">
+                                <span class="alimento-dot">•</span>
+                                <span class="alimento-emoji">${alimento.emoji}</span>
+                                <span class="alimento-nome">${alimento.nome}</span>
+                            </div>
+                            <div class="alimento-leader"></div>
+                            <div class="alimento-quantita">${alimento.quantita}</div>
                         </div>
                     `;
                 });
@@ -847,7 +811,6 @@
             });
         }
 
-        // Avvio immediato
         caricaEInizializzaPasti();
     </script>
 </body>
