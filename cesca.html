@@ -74,6 +74,16 @@
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .day-badge:active {
+            background: rgba(0, 223, 130, 0.2);
+            transform: scale(0.95);
         }
 
         .profile-title {
@@ -84,7 +94,7 @@
             text-transform: uppercase;
         }
 
-        /* --- LISTA PASTI --- */
+        /* --- LISTA PASTI BI-COLONNA PREMIUM --- */
         .pasti-flow {
             display: flex;
             flex-direction: column;
@@ -106,8 +116,9 @@
         .pasto-content {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 10px;
             flex: 1;
+            overflow: hidden;
         }
 
         .pasto-label {
@@ -118,12 +129,58 @@
             letter-spacing: 1px;
         }
 
-        .pasto-desc {
+        .pasto-desc-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .pasto-desc-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             font-size: 0.95rem;
             font-weight: 400;
-            line-height: 1.5;
             color: rgba(255, 255, 255, 0.9);
-            transition: all 0.3s ease;
+            position: relative;
+            padding-left: 20px;
+            width: 100%;
+        }
+
+        /* Pallino Tondo e Pieno Verde Accento Cyber */
+        .pasto-desc-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 0.9rem;
+            line-height: 1;
+        }
+
+        .pasto-ingredient-name {
+            flex-shrink: 0;
+            max-width: 65%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Puntini di riempimento flessibili (...) */
+        .pasto-dots {
+            flex-grow: 1;
+            border-bottom: 2px dotted rgba(0, 223, 130, 0.15);
+            margin: 0 8px;
+            transform: translateY(-4px);
+        }
+
+        .pasto-weight {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            flex-shrink: 0;
+            text-align: right;
+            white-space: nowrap;
         }
 
         /* --- PREMIUM CHECKBOX --- */
@@ -178,6 +235,13 @@
             display: block;
         }
 
+        /* Stile Checkbox Disabilitata (Giorno non corrente) */
+        .checkbox-container input:disabled ~ .custom-checkmark {
+            border-color: var(--text-muted);
+            opacity: 0.25;
+            cursor: not-allowed;
+        }
+
         /* --- STATUS COMPLETATO --- */
         .pasto-card.completed {
             opacity: 0.35;
@@ -185,9 +249,106 @@
             background: #050d0d;
         }
 
-        .pasto-card.completed .pasto-desc {
+        .pasto-card.completed .pasto-desc-list li {
             text-decoration: line-through;
             color: var(--text-muted);
+        }
+
+        /* Card bloccata visivamente per i giorni non correnti */
+        .pasto-card.locked {
+            border-color: rgba(20, 43, 43, 0.4);
+            background: rgba(10, 26, 26, 0.6);
+        }
+        .pasto-card.locked .pasto-ingredient-name,
+        .pasto-card.locked .pasto-weight {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* --- MODAL DI SOVRIMPRESSIONE SELEZIONE GIORNO --- */
+        .day-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(3, 15, 15, 0.96);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s ease;
+        }
+
+        .day-modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 24px;
+            width: calc(100% - 48px);
+            max-width: 340px;
+            transform: translateY(16px);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .day-modal.open .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--white);
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.6rem;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .days-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .day-select-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--white);
+            padding: 14px 18px;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .day-select-btn:active, .day-select-btn.active {
+            background: rgba(0, 223, 130, 0.08);
+            border-color: var(--accent);
+            color: var(--accent);
         }
     </style>
 </head>
@@ -195,18 +356,27 @@
 
     <div class="nav-top">
         <a href="index.html" class="back-btn">← Home</a>
-        <span id="live-day-badge" class="day-badge">Caricamento...</span>
+        <span id="live-day-badge" class="day-badge">Caricamento... ▾</span>
     </div>
 
     <h1 class="profile-title">Cesca</h1>
 
     <div id="pasti-container" class="pasti-flow"></div>
 
+    <div id="day-modal" class="day-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Seleziona Giorno</h2>
+                <button id="close-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="days-grid" id="days-buttons-container"></div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Verrà configurato nel prossimo step
         const firebaseConfig = {
             apiKey: "AIzaSyDD9XmvP6FtXHZPfhrDQnOwtaHvFvIopt4",
             authDomain: "webapp-dieta.firebaseapp.com",
@@ -219,133 +389,200 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Database Dieta Statica di Cesca
         const dietaCesca = {
             "Lunedì": [
-                { id: "c_lun_col", tipo: "Colazione", desc: "2 Brioscine confezionate + 4 Biscotti (tipo Gocciole o Macine)." },
-                { id: "c_lun_pra", tipo: "Pranzo", desc: "Pasta al tonno (80g di pasta + 1 lattina di tonno grande da 120g + salsa di pomodoro + 1 cucchiaio e mezzo di olio EVO a crudo)." },
-                { id: "c_lun_mer", tipo: "Merenda", desc: "1 pacchetto di Croccantelle + 1 Brioscina." },
-                { id: "c_lun_cen", tipo: "Cena", desc: "Pollo (150g, meglio sovracosce) + Patate al forno (200g) + Insalata condita con 1 cucchiaio di olio EVO." },
-                { id: "c_lun_spu", tipo: "Spuntino", desc: "1 Panino (60g di pane) con 40g di Salame." }
+                { id: "c_lun_col", tipo: "Colazione", desc: "🥐 Brioscine confezionate (2 pz) + 🍪 Biscotti Macine o Gocciole (4 pz)" },
+                { id: "c_lun_pra", tipo: "Pranzo", desc: "🍝 Pasta (80g) + 🐟 Tonno al naturale (120g) + 🍅 Salsa di pomodoro + 🫒 Olio EVO (1,5 cucchiai)" },
+                { id: "c_lun_mer", tipo: "Merenda", desc: "🍿 Croccantelle (1 pacchetto) + 🥐 Brioscina (1 pz)" },
+                { id: "c_lun_cen", tipo: "Cena", desc: "🍗 Pollo sovracosce (150g) + 🥔 Patate al forno (200g) + 🥗 Insalata mista + 🫒 Olio EVO (1 cucchiaio)" },
+                { id: "c_lun_spu", tipo: "Spuntino", desc: "🥪 Panino (60g) + 🥓 Salame crudo (40g)" }
             ],
             "Martedì": [
-                { id: "c_mar_col", tipo: "Colazione", desc: "Panino al volo (60g di pane) con 40g di Salame e 30g di Provola." },
-                { id: "c_mar_pra", tipo: "Pranzo", desc: "Pasta alla Carbonara (80g di pasta + 30g di guanciale + 1 uovo + 2 cucchiai di pecorino)." },
-                { id: "c_mar_mer", tipo: "Merenda", desc: "Una coppetta media di Gelato artigianale (circa 150g, gusti crema/cioccolato)." },
-                { id: "c_mar_cen", tipo: "Cena", desc: "Hamburger o bistecca di carne rossa (150g) + Fagiolini conditi con 2 cucchiai di olio EVO." },
-                { id: "c_mar_spu", tipo: "Spuntino", desc: "6 Biscotti golosi." }
+                { id: "c_mar_col", tipo: "Colazione", desc: "🥪 Panino al volo (60g) + 🥓 Salame crudo (40g) + 🧀 Provola dolce (30g)" },
+                { id: "c_mar_pra", tipo: "Pranzo", desc: "🍝 Pasta (80g) + 2 Guanciale croccante (30g) + 🥚 Uovo (1 pz) + 🧀 Pecorino (2 cucchiai)" },
+                { id: "c_mar_mer", tipo: "Merenda", desc: "🍦 Gelato artigianale (150g)" },
+                { id: "c_mar_cen", tipo: "Cena", desc: "🥩 Hamburger o bistecca (150g) + 🫛 Fagiolini freschi + 🫒 Olio EVO (2 cucchiai)" },
+                { id: "c_mar_spu", tipo: "Spuntino", desc: "🍪 Biscotti golosi (6 pz)" }
             ],
             "Mercoledì": [
-                { id: "c_mer_col", tipo: "Colazione", desc: "8 Biscotti (da mangiare al volo)." },
-                { id: "c_mer_pra", tipo: "Pranzo", desc: "1 Piadina intera (circa 120g) con 50g di Salame e 40g di Provola." },
-                { id: "c_mer_mer", tipo: "Merenda", desc: "1 pacchetto di Croccantelle + 2 Biscotti." },
-                { id: "c_mer_cen", tipo: "Cena", desc: "Pollo (150g) + Patate al forno (200g condite con 1 cucchiaio e mezzo di olio EVO) + Cetrioli a piacere." },
-                { id: "c_mer_spu", tipo: "Spuntino", desc: "1 Brioscina confezionata." }
+                { id: "c_mer_col", tipo: "Colazione", desc: "🍪 Biscotti golosi (8 pz)" },
+                { id: "c_mer_pra", tipo: "Pranzo", desc: "𫓴 Piadina intera (120g) + 🥓 Salame crudo (50g) + 🧀 Provola dolce (40g)" },
+                { id: "c_mer_mer", tipo: "Merenda", desc: "🍿 Croccantelle (1 pacchetto) + 🍪 Biscotti (2 pz)" },
+                { id: "c_mer_cen", tipo: "Cena", desc: "🍗 Pollo grigliato (150g) + 🥔 Patate al forno (200g) + 🥒 Cetrioli a piacere + 🫒 Olio EVO (1,5 cucchiai)" },
+                { id: "c_mer_spu", tipo: "Spuntino", desc: "🥐 Brioscina confezionata (1 pz)" }
             ],
             "Giovedì": [
-                { id: "c_gio_col", tipo: "Colazione", desc: "2 Brioscine confezionate + 4 Biscotti." },
-                { id: "c_gio_pra", tipo: "Pranzo", desc: "Pasta al tonno (80g di pasta + 1 lattina di tonno + salsa + 1 cucchiaio e mezzo di olio EVO)." },
-                { id: "c_gio_mer", tipo: "Merenda", desc: "Una coppetta media di Gelato artigianale + 1 pacchetto di Croccantelle." },
-                { id: "c_gio_cen", tipo: "Cena", desc: "Carne rossa (150g) + Fagiolini conditi con 2 cucchiai di olio EVO." },
-                { id: "c_gio_spu", tipo: "Spuntino", desc: "1 Panino (60g di pane) con 40g di Salame." }
+                { id: "c_gio_col", tipo: "Colazione", desc: "🥐 Brioscine confezionate (2 pz) + 🍪 Biscotti (4 pz)" },
+                { id: "c_gio_pra", tipo: "Pranzo", desc: "🍝 Pasta (80g) + 🐟 Tonno al naturale (120g) + 🍅 Salsa di pomodoro + 🫒 Olio EVO (1,5 cucchiai)" },
+                { id: "c_gio_mer", tipo: "Merenda", desc: "🍦 Gelato artigianale (150g) + 🍿 Croccantelle (1 pacchetto)" },
+                { id: "c_gio_cen", tipo: "Cena", desc: "🥩 Carne rossa magra (150g) + 🫛 Fagiolini freschi + 🫒 Olio EVO (2 cucchiai)" },
+                { id: "c_gio_spu", tipo: "Spuntino", desc: "🥪 Panino (60g) + 2 Confezioni di Salame (40g)" }
             ],
             "Venerdì": [
-                { id: "c_ven_col", tipo: "Colazione", desc: "Panino al volo (60g di pane) con 40g di Salame e 30g di Provola." },
-                { id: "c_ven_pra", tipo: "Pranzo", desc: "Pasta alla Carbonara (80g di pasta + 30g di guanciale + 1 uovo + pecorino)." },
-                { id: "c_ven_mer", tipo: "Merenda", desc: "1 Brioscina + 3 Biscotti." },
-                { id: "c_ven_cen", tipo: "Cena", desc: "1 Pizza margherita intera (con salame o provola aggiunta sopra)." },
-                { id: "c_ven_spu", tipo: "Spuntino", desc: "1 pacchetto di Croccantelle." }
+                { id: "c_ven_col", tipo: "Colazione", desc: "🥪 Panino al volo (60g) + 🥓 Salame crudo (40g) + 🧀 Provola dolce (30g)" },
+                { id: "c_ven_pra", tipo: "Pranzo", desc: "🍝 Pasta (80g) + 2 Guanciale croccante (30g) + 🥚 Uovo (1 pz) + 🧀 Pecorino (2 cucchiai)" },
+                { id: "c_ven_mer", tipo: "Merenda", desc: "🥐 Brioscina (1 pz) + 🍪 Biscotti (3 pz)" },
+                { id: "c_ven_cen", tipo: "Cena", desc: "🍕 Pizza Margherita (1 pz) + 2 Aggiunta Salame o Provola" },
+                { id: "c_ven_spu", tipo: "Spuntino", desc: "🍿 Croccantelle (1 pacchetto)" }
             ],
             "Sabato": [
-                { id: "c_sab_col", tipo: "Colazione", desc: "8 Biscotti." },
-                { id: "c_sab_pra", tipo: "Pranzo", desc: "1 Piadina intera con 50g di Salame e 40g di Provola." },
-                { id: "c_sab_mer", tipo: "Merenda", desc: "Una coppetta media di Gelato artigianale." },
-                { id: "c_sab_cen", tipo: "Cena", desc: "Carne rossa (150g) + Patate in padella (200g) + Insalata condita con 1 cucchiaio di olio EVO." },
-                { id: "c_sab_spu", tipo: "Spuntino", desc: "1 Panino (60g di pane) con 40g di Salame." }
+                { id: "c_sab_col", tipo: "Colazione", desc: "🍪 Biscotti golosi (8 pz)" },
+                { id: "c_sab_pra", tipo: "Pranzo", desc: "𫓴 Piadina intera (120g) + 🥓 Salame crudo (50g) + 🧀 Provola dolce (40g)" },
+                { id: "c_sab_mer", tipo: "Merenda", desc: "🍦 Una coppetta media di Gelato artigianale" },
+                { id: "c_sab_cen", tipo: "Cena", desc: "🥩 Carne rossa (150g) + 🥔 Patate in padella (200g) + 🥗 Insalata mista + 🫒 Olio EVO (1 cucchiaio)" },
+                { id: "c_sab_spu", tipo: "Spuntino", desc: "🥪 Panino (60g) + 2 Salame crudo (40g)" }
             ],
             "Domenica": [
-                { id: "c_dom_col", tipo: "Colazione", desc: "2 Brioscine confezionate + 4 Biscotti." },
-                { id: "c_dom_pra", tipo: "Pranzo", desc: "Il suo primo preferito (Pasta al tonno o Carbonara, sempre 80g di pasta)." },
-                { id: "c_dom_mer", tipo: "Merenda", desc: "1 pacchetto di Croccantelle + 1 Brioscina." },
-                { id: "c_dom_cen", tipo: "Cena", desc: "2 Uova (all'occhio di bue o frittata) + Patate (200g) + Cetriolini a piacere." },
-                { id: "c_dom_spu", tipo: "Spuntino", desc: "6 Biscotti." }
+                { id: "c_dom_col", tipo: "Colazione", desc: "🥐 Brioscine confezionate (2 pz) + 🍪 Biscotti (4 pz)" },
+                { id: "c_dom_pra", tipo: "Pranzo", desc: "🍝 Primo piatto preferito (80g)" },
+                { id: "c_dom_mer", tipo: "Merenda", desc: "🍿 Croccantelle (1 pacchetto) + 🥐 Brioscina (1 pz)" },
+                { id: "c_dom_cen", tipo: "Cena", desc: "🥚 Uova all'occhio o Frittata (2 pz) + 🥔 Patate cotte (200g) + 🥒 Cetriolini a piacere" },
+                { id: "c_dom_spu", tipo: "Spuntino", desc: "🍪 Biscotti golosi (6 pz)" }
             ]
         };
 
         const giorniSettimana = ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
         const oggi = new Date();
         const nomeGiornoOggi = giorniSettimana[oggi.getDay()];
-        const stringaDataOggi = oggi.toISOString().split('T')[0]; // Genera formato YYYY-MM-DD
+        const stringaDataOggi = oggi.toISOString().split('T')[0];
 
-        // Aggiorna l'interfaccia con il giorno corrente
-        document.getElementById("live-day-badge").innerText = nomeGiornoOggi;
-
-        const pastiDelGiorno = dietaCesca[nomeGiornoOggi] || [];
+        let databaseStatiCheckbox = {}; 
         const container = document.getElementById("pasti-container");
+        const badgeGiorno = document.getElementById("live-day-badge");
         const docRef = doc(db, "diete", "cesca");
 
-        async function initApp() {
-            let statiCheckbox = {};
+        const modal = document.getElementById("day-modal");
+        const btnChiudiModal = document.getElementById("close-modal");
+        const containerBottoniGiorni = document.getElementById("days-buttons-container");
 
-            try {
-                const docSnap = await getDoc(docRef);
-                
-                if (docSnap.exists()) {
-                    const datiCloud = docSnap.data();
-                    // CONTROLLO RESET: Se la data salvata è diversa da oggi, resetta il cloud
-                    if (datiCloud.last_date !== stringaDataOggi) {
-                        await setDoc(docRef, { last_date: stringaDataOggi, pasti: {} });
-                    } else {
-                        statiCheckbox = datiCloud.pasti || {};
-                    }
-                } else {
-                    // Primo avvio assoluto del database
-                    await setDoc(docRef, { last_date: stringaDataOggi, pasti: {} });
-                }
-            } catch (e) {
-                console.log("Firebase non configurato o offline. Uso della memoria locale temporanea.");
-            }
+        function renderizzaPastiGiorno(giornoSelezionato) {
+            container.innerHTML = ""; 
+            badgeGiorno.innerText = `${giornoSelezionato} ▾`;
 
-            // Renderizza i pasti a schermo
+            const isToday = (giornoSelezionato === nomeGiornoOggi);
+            const pastiDelGiorno = dietaCesca[giornoSelezionato] || [];
+
             pastiDelGiorno.forEach(pasto => {
-                const isChecked = statiCheckbox[pasto.id] || false;
+                const isChecked = databaseStatiCheckbox[pasto.id] || false;
                 
                 const card = document.createElement("div");
                 card.id = `card-${pasto.id}`;
-                card.className = `pasto-card ${isChecked ? 'completed' : ''}`;
+                card.className = `pasto-card ${isChecked ? 'completed' : ''} ${isToday ? '' : 'locked'}`;
                 
+                const ingredientiRAW = pasto.desc.split('+');
+                const ingredientiHTML = ingredientiRAW.map(elemento => {
+                    let name = elemento.trim();
+                    let qty = '';
+
+                    const regExp = /\(([^)]+)\)/;
+                    const match = name.match(regExp);
+                    if (match) {
+                        qty = match[1]; 
+                        name = name.replace(regExp, '').trim(); 
+                    }
+
+                    const dotsHTML = qty ? '<span class="pasto-dots"></span>' : '';
+
+                    return `
+                        <li>
+                            <span class="pasto-ingredient-name">${name}</span>
+                            ${dotsHTML}
+                            <span class="pasto-weight">${qty}</span>
+                        </li>
+                    `;
+                }).join('');
+
                 card.innerHTML = `
                     <div class="pasto-content">
                         <span class="pasto-label">${pasto.tipo}</span>
-                        <span class="pasto-desc">${pasto.desc}</span>
+                        <ul class="pasto-desc-list">
+                            ${ingredientiHTML}
+                        </ul>
                     </div>
                     <div class="checkbox-container">
-                        <input type="checkbox" id="${pasto.id}" ${isChecked ? 'checked' : ''}>
+                        <input type="checkbox" id="${pasto.id}" ${isChecked ? 'checked' : ''} ${isToday ? '' : 'disabled'}>
                         <span class="custom-checkmark"></span>
                     </div>
                 `;
                 
                 container.appendChild(card);
 
-                // Event listener per salvare i dati al click
-                const input = card.querySelector('input');
-                input.addEventListener('change', async (e) => {
-                    const checked = e.target.checked;
-                    if(checked) {
-                        card.classList.add('completed');
+                if (isToday) {
+                    const input = card.querySelector('input');
+                    input.addEventListener('change', async (e) => {
+                        const checked = e.target.checked;
+                        databaseStatiCheckbox[pasto.id] = checked; 
+                        
+                        if(checked) {
+                            card.classList.add('completed');
+                        } else {
+                            card.classList.remove('completed');
+                        }
+                        
+                        try {
+                            await updateDoc(docRef, {
+                                [`pasti.${pasto.id}`]: checked
+                            });
+                        } catch(err) {
+                            console.error("Errore salvataggio Firebase:", err);
+                        }
+                    });
+                }
+            });
+        }
+
+        async function initApp() {
+            try {
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    const datiCloud = docSnap.data();
+                    if (datiCloud.last_date !== stringaDataOggi) {
+                        await setDoc(docRef, { last_date: stringaDataOggi, pasti: {} });
                     } else {
-                        card.classList.remove('completed');
+                        databaseStatiCheckbox = datiCloud.pasti || {};
                     }
+                } else {
+                    await setDoc(docRef, { last_date: stringaDataOggi, pasti: {} });
+                }
+            } catch (e) {
+                console.log("Firebase Offline. Fallback locale attivo.");
+            }
+
+            renderizzaPastiGiorno(nomeGiornoOggi);
+            generaBottoniModal();
+        }
+
+        badgeGiorno.addEventListener('click', () => {
+            modal.classList.add('open');
+        });
+
+        btnChiudiModal.addEventListener('click', () => {
+            modal.classList.remove('open');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if(e.target === modal) modal.classList.remove('open');
+        });
+
+        function generaBottoniModal() {
+            containerBottoniGiorni.innerHTML = "";
+            const giorniOrdinati = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"];
+            
+            giorniOrdinati.forEach(giorno => {
+                const bottone = document.createElement("button");
+                bottone.className = `day-select-btn ${giorno === nomeGiornoOggi ? 'active' : ''}`;
+                bottone.innerText = giorno;
+                
+                bottone.addEventListener('click', () => {
+                    document.querySelectorAll('.day-select-btn').forEach(b => b.classList.remove('active'));
+                    bottone.classList.add('active');
                     
-                    // Update su Firebase
-                    try {
-                        await updateDoc(docRef, {
-                            [`pasti.${pasto.id}`]: checked
-                        });
-                    } catch(err) {
-                        console.error("Errore salvataggio Firebase:", err);
-                    }
+                    renderizzaPastiGiorno(giorno);
+                    modal.classList.remove('open');
                 });
+                
+                containerBottoniGiorni.appendChild(bottone);
             });
         }
 
