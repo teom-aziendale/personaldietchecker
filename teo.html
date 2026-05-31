@@ -40,9 +40,10 @@
             padding: calc(var(--safe-top) + 24px) 24px calc(var(--safe-bottom) + 30px) 24px;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
         }
 
-        /* --- NAVIGATION UPPER BAR --- */
+        /* --- NAV BAR --- */
         .nav-top {
             display: flex;
             justify-content: space-between;
@@ -60,35 +61,62 @@
             transition: color 0.2s ease;
         }
 
-        .back-btn:active {
+        .back-btn:hover, .back-btn:active {
             color: var(--accent);
         }
 
-        .day-badge {
+        /* Badge Giorno Cliccabile */
+        .day-badge-trigger {
             background: rgba(0, 223, 130, 0.08);
             border: 1px solid rgba(0, 223, 130, 0.2);
             color: var(--accent);
-            padding: 6px 16px;
+            padding: 8px 18px;
             border-radius: 100px;
             font-size: 0.75rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .day-badge-trigger:active {
+            transform: scale(0.95);
+            background: rgba(0, 223, 130, 0.15);
         }
 
         .profile-title {
-            font-size: 2.2rem;
+            font-size: 2.4rem;
             font-weight: 800;
             letter-spacing: -1.5px;
-            margin-bottom: 32px;
+            margin-bottom: 24px;
             text-transform: uppercase;
         }
 
-        /* --- LISTA PASTI --- */
+        /* Banner Stato Sola Lettura */
+        .read-only-banner {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* --- CARTE DEI PASTI (STILE CESCA) --- */
         .pasti-flow {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
         }
 
         .pasto-card {
@@ -99,38 +127,105 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 20px;
+            gap: 16px;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
         }
 
-        .pasto-content {
+        .pasto-main-content {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 14px;
             flex: 1;
         }
 
         .pasto-label {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--accent);
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
 
-        .pasto-desc {
+        /* Lista Alimenti Interna */
+        .alimenti-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .alimento-row {
+            display: flex;
+            align-items: center;
+            width: 100%;
             font-size: 0.95rem;
-            font-weight: 400;
-            line-height: 1.5;
-            color: rgba(255, 255, 255, 0.9);
-            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.95);
         }
 
-        /* --- PREMIUM CHECKBOX --- */
+        .alimento-dot {
+            color: var(--accent);
+            font-size: 1.2rem;
+            margin-right: 8px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .alimento-emoji {
+            margin-right: 8px;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .alimento-nome {
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Fiammella per cottura in friggitrice */
+        .alimento-nome.clickable {
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-color: rgba(0, 223, 130, 0.4);
+            text-underline-offset: 4px;
+            transition: color 0.2s;
+        }
+
+        .alimento-nome.clickable:hover {
+            color: var(--accent);
+        }
+
+        .airfryer-badge {
+            margin-left: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        /* Tratteggio dinamico */
+        .alimento-leader {
+            flex-grow: 1;
+            border-bottom: 2px dotted rgba(82, 107, 107, 0.35);
+            margin: 0 10px;
+            position: relative;
+            top: 4px;
+            height: 1px;
+        }
+
+        .alimento-quantita {
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            text-align: right;
+        }
+
+        /* --- CHECKBOX PREMIUM --- */
         .checkbox-container {
             position: relative;
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             flex-shrink: 0;
         }
 
@@ -143,30 +238,34 @@
             z-index: 2;
         }
 
+        .checkbox-container input:disabled {
+            cursor: not-allowed;
+        }
+
         .custom-checkmark {
             position: absolute;
             top: 0;
             left: 0;
-            height: 32px;
-            width: 32px;
+            height: 34px;
+            width: 34px;
             background: transparent;
             border: 2px solid var(--border);
-            border-radius: 10px;
-            transition: all 0.2s ease;
+            border-radius: 12px;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .checkbox-container input:checked ~ .custom-checkmark {
             background-color: var(--accent);
             border-color: var(--accent);
-            box-shadow: 0 0 12px rgba(0, 223, 130, 0.3);
+            box-shadow: 0 0 16px rgba(0, 223, 130, 0.35);
         }
 
         .custom-checkmark:after {
             content: "";
             position: absolute;
             display: none;
-            left: 10px;
-            top: 5px;
+            left: 11px;
+            top: 6px;
             width: 6px;
             height: 13px;
             border: solid var(--bg-deep);
@@ -178,16 +277,165 @@
             display: block;
         }
 
-        /* --- STATUS COMPLETATO --- */
+        /* Stato completato per l'intera card */
         .pasto-card.completed {
             opacity: 0.35;
             border-color: transparent;
-            background: #050d0d;
+            background: rgba(10, 26, 26, 0.4);
         }
 
-        .pasto-card.completed .pasto-desc {
+        .pasto-card.completed .alimento-nome {
             text-decoration: line-through;
             color: var(--text-muted);
+        }
+
+        /* --- FINESTRE MODALI (OVERLAYS) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(3, 15, 15, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 380px;
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            transform: translateY(30px);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-header h3 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .modal-close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.8rem;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            color: var(--white);
+        }
+
+        /* Stile Lista Giorni (Screenshot 1) */
+        .day-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .day-option {
+            background: rgba(10, 26, 26, 0.4);
+            border: 1px solid var(--border);
+            color: var(--white);
+            padding: 16px 20px;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .day-option.active {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(0, 223, 130, 0.05);
+        }
+
+        .day-option:active {
+            transform: scale(0.98);
+            background: rgba(0, 223, 130, 0.1);
+        }
+
+        /* Dettagli Cottura */
+        .cooking-detail-item {
+            background: rgba(10, 26, 26, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 14px 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .cooking-detail-item span {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .cooking-detail-item strong {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .modal-action-btn {
+            background: var(--accent);
+            color: var(--bg-deep);
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            margin-top: 14px;
+            transition: transform 0.15s ease;
+        }
+
+        .modal-action-btn:active {
+            transform: scale(0.97);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -195,18 +443,54 @@
 
     <div class="nav-top">
         <a href="index.html" class="back-btn">← Home</a>
-        <span id="live-day-badge" class="day-badge">Caricamento...</span>
+        <div id="live-day-badge" class="day-badge-trigger" onclick="openDayModal()">
+            <span id="badge-text">Caricamento...</span> ▾
+        </div>
     </div>
 
     <h1 class="profile-title">Teo</h1>
 
+    <!-- Banner visualizzato quando siamo in visualizzazione di un giorno diverso da oggi -->
+    <div id="read-only-notice" class="read-only-banner" style="display: none;">
+        <span>⚠️</span>
+        <span>Sola Lettura. Puoi spuntare i pasti solo nel giorno corrente.</span>
+    </div>
+
+    <!-- Lista dei Pasti -->
     <div id="pasti-container" class="pasti-flow"></div>
+
+    <!-- MODALE SELEZIONA GIORNO (Screenshot 1) -->
+    <div id="day-modal" class="modal-overlay" onclick="closeDayModalOutside(event)">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>SELEZIONA GIORNO</h3>
+                <button class="modal-close-btn" onclick="closeDayModal()">&times;</button>
+            </div>
+            <div class="day-list" id="day-options-container">
+                <!-- Generato via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALE DETTAGLI COTTURA FRIGGITRICE AD ARIA -->
+    <div id="cooking-modal" class="modal-overlay" onclick="closeCookingModalOutside(event)">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="cooking-food-title">Cottura</h3>
+                <button class="modal-close-btn" onclick="closeCookingModal()">&times;</button>
+            </div>
+            <div id="cooking-details-body">
+                <!-- Generato via JavaScript -->
+            </div>
+            <button class="modal-action-btn" onclick="closeCookingModal()">Capito!</button>
+        </div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Incolla qui la stessa identica configurazione usata in cesca.html
+        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDD9XmvP6FtXHZPfhrDQnOwtaHvFvIopt4",
             authDomain: "webapp-dieta.firebaseapp.com",
@@ -219,117 +503,548 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Database Dieta Statica di Teo
+        // Dieta Strutturata di Teo (Ottimizzata per visualizzazione a lista stile "Cesca")
         const dietaTeo = {
             "Lunedì": [
-                { id: "t_lun_col", tipo: "Colazione", desc: "2 Uova intere strapazzate in padella + 2 fette di Pane Integrale tostato (60g totali) + 15g di Mandorle o Noci + 1 Mela grande mangiata con la buccia." },
-                { id: "t_lun_pra", tipo: "Pranzo", desc: "80g di Pasta Integrale condita con 120g di Tonno al naturale e passata di pomodoro + Zucchine a rondelle (200g) in friggitrice ad aria (200°C per 12 minuti) + 1 cucchiaio e mezzo di Olio EVO (15g) a crudo." },
-                { id: "t_lun_cen", tipo: "Cena", desc: "1 Hamburger di carne rossa magra (150g) in friggitrice ad aria (190°C per 9 minuti) + Patate a cubetti con la buccia (150g) in friggitrice ad aria (200°C per 15-20 minuti) + 150g di Fagioli borlotti in scatola (sciacquati) + 2 cucchiai e mezzo di Olio EVO (25g) per condire patate e fagioli." }
+                {
+                    id: "teo_lun_col",
+                    tipo: "Colazione",
+                    alimenti: [
+                        { emoji: "🍳", nome: "Uova intere strapazzate in padella", quantita: "2 pz" },
+                        { emoji: "🍞", nome: "Pane Integrale tostato", quantita: "60g" },
+                        { emoji: "🥜", nome: "Mandorle o Noci", quantita: "15g" },
+                        { emoji: "🍎", nome: "Mela grande (con buccia)", quantita: "1 pz" }
+                    ]
+                },
+                {
+                    id: "teo_lun_pra",
+                    tipo: "Pranzo",
+                    alimenti: [
+                        { emoji: "🍝", nome: "Pasta Integrale", quantita: "80g" },
+                        { emoji: "🐟", nome: "Tonno al naturale", quantita: "120g" },
+                        { emoji: "🍅", nome: "Passata di pomodoro", quantita: "q.b." },
+                        { 
+                            emoji: "🥒", 
+                            nome: "Zucchine a rondelle", 
+                            quantita: "200g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "200°C", minuti: "12 min" }
+                        },
+                        { emoji: "🫒", nome: "Olio EVO (a crudo)", quantita: "1,5 cucchiai" }
+                    ]
+                },
+                {
+                    id: "teo_lun_cen",
+                    tipo: "Cena",
+                    alimenti: [
+                        { 
+                            emoji: "🥩", 
+                            nome: "Hamburger di carne rossa magra", 
+                            quantita: "150g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "190°C", minuti: "9 min" }
+                        },
+                        { 
+                            emoji: "🥔", 
+                            nome: "Patate a cubetti con la buccia", 
+                            quantita: "150g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "200°C", minuti: "15-20 min" }
+                        },
+                        { emoji: "🫘", nome: "Fagioli borlotti in scatola", quantita: "150g" },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "2,5 cucchiai" }
+                    ]
+                }
             ],
             "Martedì": [
-                { id: "t_mar_col", tipo: "Colazione", desc: "2 Uova intere strapazzate + 2 fette di Pane Integrale tostato (60g) + 15g di Mandorle + 1 Banana media." },
-                { id: "t_mar_pra", tipo: "Pranzo", desc: "80g di Pasta Integrale con Petto di pollo a cubetti (130g) cotto prima in friggitrice ad aria + Insalata mista abbondante + 1 cucchiaio e mezzo di Olio EVO (15g)." },
-                { id: "t_mar_cen", tipo: "Cena", desc: "Filetto di merluzzo o pesce bianco surgelato (170g) buttato direttamente in friggitrice ad aria (190°C per 15 minuti) + Patate a cubetti con la buccia (150g) in friggitrice ad aria + 150g di Fagioli cannellini in scatola (sciacquati) + 3 cucchiai e mezzo di Olio EVO (35g - aumentiamo l'olio perché il merluzzo è molto magro)." }
+                {
+                    id: "teo_mar_col",
+                    tipo: "Colazione",
+                    alimenti: [
+                        { emoji: "🍳", nome: "Uova intere strapazzate", quantita: "2 pz" },
+                        { emoji: "🍞", nome: "Pane Integrale tostato", quantita: "60g" },
+                        { emoji: "🥜", nome: "Mandorle", quantita: "15g" },
+                        { emoji: "🍌", nome: "Banana media", quantita: "1 pz" }
+                    ]
+                },
+                {
+                    id: "teo_mar_pra",
+                    tipo: "Pranzo",
+                    alimenti: [
+                        { emoji: "🍝", nome: "Pasta Integrale", quantita: "80g" },
+                        { 
+                            emoji: "🍗", 
+                            nome: "Petto di pollo a cubetti", 
+                            quantita: "130g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "190°C", minuti: "10-12 min" }
+                        },
+                        { emoji: "🥗", nome: "Insalata mista abbondante", quantita: "q.b." },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "1,5 cucchiai" }
+                    ]
+                },
+                {
+                    id: "teo_mar_cen",
+                    tipo: "Cena",
+                    alimenti: [
+                        { 
+                            emoji: "🐟", 
+                            nome: "Filetto di merluzzo surgelato", 
+                            quantita: "170g",
+                            airFryer: { metodo: "Friggitrice ad aria (diretto da surgelato)", temp: "190°C", minuti: "15 min" }
+                        },
+                        { 
+                            emoji: "🥔", 
+                            nome: "Patate a cubetti con la buccia", 
+                            quantita: "150g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "200°C", minuti: "15-20 min" }
+                        },
+                        { emoji: "🫘", nome: "Fagioli cannellini in scatola", quantita: "150g" },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "3,5 cucchiai" }
+                    ]
+                }
             ],
             "Mercoledì": [
-                { id: "t_mer_col", tipo: "Colazione", desc: "2 Uova intere strapazzate + 2 fette di Pane Integrale tostato (60g) + 15g di Mandorle + 1 Mela grande con la buccia." },
-                { id: "t_mer_pra", tipo: "Pranzo", desc: "80g di Pasta Integrale con 120g di Tonno al naturale e salsa + Zucchine in friggitrice ad aria (200g) + 1 cucchiaio e mezzo di Olio EVO (15g)." },
-                { id: "t_mer_cen", tipo: "Cena", desc: "Petto di pollo intero (150g) speziato e cotto in friggitrice ad aria (190°C per 15 minuti) + Patate a cubetti con la buccia (150g) in friggitrice ad aria + 150g di Fagioli borlotti in scatola + 3 cucchiai di Olio EVO (30g)." }
+                {
+                    id: "teo_mer_col",
+                    tipo: "Colazione",
+                    alimenti: [
+                        { emoji: "🍳", nome: "Uova intere strapazzate", quantita: "2 pz" },
+                        { emoji: "🍞", nome: "Pane Integrale tostato", quantita: "60g" },
+                        { emoji: "🥜", nome: "Mandorle", quantita: "15g" },
+                        { emoji: "🍎", nome: "Mela grande (con buccia)", quantita: "1 pz" }
+                    ]
+                },
+                {
+                    id: "teo_mer_pra",
+                    tipo: "Pranzo",
+                    alimenti: [
+                        { emoji: "🍝", nome: "Pasta Integrale", quantita: "80g" },
+                        { emoji: "🐟", nome: "Tonno al naturale", quantita: "120g" },
+                        { emoji: "🍅", nome: "Passata di pomodoro", quantita: "q.b." },
+                        { 
+                            emoji: "🥒", 
+                            nome: "Zucchine in friggitrice", 
+                            quantita: "200g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "200°C", minuti: "12 min" }
+                        },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "1,5 cucchiai" }
+                    ]
+                },
+                {
+                    id: "teo_mer_cen",
+                    tipo: "Cena",
+                    alimenti: [
+                        { 
+                            emoji: "🍗", 
+                            nome: "Petto di pollo intero", 
+                            quantita: "150g",
+                            airFryer: { metodo: "Friggitrice ad aria (speziato)", temp: "190°C", minuti: "15 min" }
+                        },
+                        { 
+                            emoji: "🥔", 
+                            nome: "Patate a cubetti con la buccia", 
+                            quantita: "150g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "200°C", minuti: "15-20 min" }
+                        },
+                        { emoji: "🫘", nome: "Fagioli borlotti in scatola", quantita: "150g" },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "3 cucchiai" }
+                    ]
+                }
             ],
             "Giovedì": [
-                { id: "t_gio_col", tipo: "Colazione", desc: "2 Uova intere strapazzate + 2 fette di Pane Integrale tostato (60g) + 15g di Mandorle + 1 Banana media." },
-                { id: "t_gio_pra", tipo: "Pranzo", desc: "80g di Pasta Integrale condita con passata di pomodoro e 1 cucchiaio di pecorino + 1 Hamburger di carne rossa magra (120g) al volo in friggitrice ad aria + 1 cucchiaio e mezzo di Olio EVO (15g)." },
-                { id: "t_gio_cen", tipo: "Cena", desc: "Filetto di merluzzo (170g) in friggitrice ad aria + Patate a cubetti con la buccia (150g) in friggitrice ad aria + Insalata mista + 3 cucchiai e mezzo di Olio EVO (35g)." }
+                {
+                    id: "teo_gio_col",
+                    tipo: "Colazione",
+                    alimenti: [
+                        { emoji: "🍳", nome: "Uova intere strapazzate", quantita: "2 pz" },
+                        { emoji: "🍞", nome: "Pane Integrale tostato", quantita: "60g" },
+                        { emoji: "🥜", nome: "Mandorle", quantita: "15g" },
+                        { emoji: "🍌", nome: "Banana media", quantita: "1 pz" }
+                    ]
+                },
+                {
+                    id: "teo_gio_pra",
+                    tipo: "Pranzo",
+                    alimenti: [
+                        { emoji: "🍝", nome: "Pasta Integrale", quantita: "80g" },
+                        { emoji: "🍅", nome: "Passata di pomodoro", quantita: "q.b." },
+                        { emoji: "🧀", nome: "Pecorino grattugiato", quantita: "1 cucchiaio" },
+                        { 
+                            emoji: "🥩", 
+                            nome: "Hamburger di carne rossa magra", 
+                            quantita: "120g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "190°C", minuti: "9 min" }
+                        },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "1,5 cucchiai" }
+                    ]
+                },
+                {
+                    id: "teo_gio_cen",
+                    tipo: "Cena",
+                    alimenti: [
+                        { 
+                            emoji: "🐟", 
+                            nome: "Filetto di merluzzo", 
+                            quantita: "170g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "190°C", minuti: "15 min" }
+                        },
+                        { 
+                            emoji: "🥔", 
+                            nome: "Patate a cubetti con la buccia", 
+                            quantita: "150g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "200°C", minuti: "15-20 min" }
+                        },
+                        { emoji: "🥗", nome: "Insalata mista", quantita: "q.b." },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "3,5 cucchiai" }
+                    ]
+                }
             ],
             "Venerdì": [
-                { id: "t_ven_col", tipo: "Colazione", desc: "2 Uova intere strapazzate + 2 fette di Pane Integrale tostato (60g) + 15g di Mandorle + 1 Mela grande con la buccia." },
-                { id: "t_ven_pra", tipo: "Pranzo", desc: "80g di Pasta Integrale con 120g di Tonno al naturale + Zucchine in friggitrice ad aria (200g) + 1 cucchiaio e mezzo di Olio EVO (15g)." },
-                { id: "t_ven_cen", tipo: "Cena", desc: "1 Hamburger di carne rossa magra (150g) in friggitrice ad aria + 150g di Fagioli cannellini in scatola + Patate a cubetti con la buccia (150g) in friggitrice ad aria + 2 cucchiai e mezzo di Olio EVO (25g)." }
+                {
+                    id: "teo_ven_col",
+                    tipo: "Colazione",
+                    alimenti: [
+                        { emoji: "🍳", nome: "Uova intere strapazzate", quantita: "2 pz" },
+                        { emoji: "🍞", nome: "Pane Integrale tostato", quantita: "60g" },
+                        { emoji: "🥜", nome: "Mandorle", quantita: "15g" },
+                        { emoji: "🍎", nome: "Mela grande (con buccia)", quantita: "1 pz" }
+                    ]
+                },
+                {
+                    id: "teo_ven_pra",
+                    tipo: "Pranzo",
+                    alimenti: [
+                        { emoji: "🍝", nome: "Pasta Integrale", quantita: "80g" },
+                        { emoji: "🐟", nome: "Tonno al naturale", quantita: "120g" },
+                        { 
+                            emoji: "🥒", 
+                            nome: "Zucchine in friggitrice", 
+                            quantita: "200g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "200°C", minuti: "12 min" }
+                        },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "1,5 cucchiai" }
+                    ]
+                },
+                {
+                    id: "teo_ven_cen",
+                    tipo: "Cena",
+                    alimenti: [
+                        { 
+                            emoji: "🥩", 
+                            nome: "Hamburger di carne rossa magra", 
+                            quantita: "150g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "190°C", minuti: "9 min" }
+                        },
+                        { emoji: "🫘", nome: "Fagioli cannellini in scatola", quantita: "150g" },
+                        { 
+                            emoji: "🥔", 
+                            nome: "Patate a cubetti con la buccia", 
+                            quantita: "150g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "200°C", minuti: "15-20 min" }
+                        },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "2,5 cucchiai" }
+                    ]
+                }
             ],
             "Sabato": [
-                { id: "t_sab_col", tipo: "Colazione", desc: "2 Uova intere strapazzate + 2 fette di Pane Integrale tostato (60g) + 15g di Mandorle + 1 Banana media." },
-                { id: "t_sab_pra", tipo: "Pranzo", desc: "80g di Pasta Integrale con Petto di pollo a cubetti (130g) in friggitrice ad aria + Zucchine in friggitrice ad aria (200g) + 1 cucchiaio e mezzo di Olio EVO (15g)." },
-                { id: "t_sab_cen", tipo: "Cena", desc: "Petto di pollo intero (150g) in friggitrice ad aria + Patate a cubetti con la buccia (150g) in friggitrice ad aria + 150g di Fagioli borlotti in scatola + 3 cucchiai di Olio EVO (30g)." }
+                {
+                    id: "teo_sab_col",
+                    tipo: "Colazione",
+                    alimenti: [
+                        { emoji: "🍳", nome: "Uova intere strapazzate", quantita: "2 pz" },
+                        { emoji: "🍞", nome: "Pane Integrale tostato", quantita: "60g" },
+                        { emoji: "🥜", nome: "Mandorle", quantita: "15g" },
+                        { emoji: "🍌", nome: "Banana media", quantita: "1 pz" }
+                    ]
+                },
+                {
+                    id: "teo_sab_pra",
+                    tipo: "Pranzo",
+                    alimenti: [
+                        { emoji: "🍝", nome: "Pasta Integrale", quantita: "80g" },
+                        { 
+                            emoji: "🍗", 
+                            nome: "Petto di pollo a cubetti", 
+                            quantita: "130g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "190°C", minuti: "10-12 min" }
+                        },
+                        { 
+                            emoji: "🥒", 
+                            nome: "Zucchine in friggitrice", 
+                            quantita: "200g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "200°C", minuti: "12 min" }
+                        },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "1,5 cucchiai" }
+                    ]
+                },
+                {
+                    id: "teo_sab_cen",
+                    tipo: "Cena",
+                    alimenti: [
+                        { 
+                            emoji: "🍗", 
+                            nome: "Petto di pollo intero", 
+                            quantita: "150g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "190°C", minuti: "15 min" }
+                        },
+                        { 
+                            emoji: "🥔", 
+                            nome: "Patate a cubetti con la buccia", 
+                            quantita: "150g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "200°C", minuti: "15-20 min" }
+                        },
+                        { emoji: "🫘", nome: "Fagioli borlotti in scatola", quantita: "150g" },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "3 cucchiai" }
+                    ]
+                }
             ],
             "Domenica": [
-                { id: "t_dom_col", tipo: "Colazione", desc: "2 Uova intere strapazzate + 2 fette di Pane Integrale tostato (60g) + 15g di Mandorle + 1 Mela grande con la buccia." },
-                { id: "t_dom_pra", tipo: "Pranzo", desc: "80g di Pasta Integrale con Tonno (120g) o sugo semplice + Insalata mista + 1 cucchiaio e mezzo di Olio EVO (15g)." },
-                { id: "t_dom_cen", skin: "Cena", desc: "1 Hamburger di carne rossa magra (150g) in friggitrice ad aria + Patate a cubetti con la buccia (150g) in friggitrice ad aria + 150g di Fagioli cannellini in scatola + 2 cucchiai e mezzo di Olio EVO (25g)." }
+                {
+                    id: "teo_dom_col",
+                    tipo: "Colazione",
+                    alimenti: [
+                        { emoji: "🍳", nome: "Uova intere strapazzate", quantita: "2 pz" },
+                        { emoji: "🍞", nome: "Pane Integrale tostato", quantita: "60g" },
+                        { emoji: "🥜", nome: "Mandorle", quantita: "15g" },
+                        { emoji: "🍎", nome: "Mela grande (con buccia)", quantita: "1 pz" }
+                    ]
+                },
+                {
+                    id: "teo_dom_pra",
+                    tipo: "Pranzo",
+                    alimenti: [
+                        { emoji: "🍝", nome: "Pasta Integrale", quantita: "80g" },
+                        { emoji: "🐟", nome: "Tonno o sugo semplice", quantita: "120g" },
+                        { emoji: "🥗", nome: "Insalata mista", quantita: "q.b." },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "1,5 cucchiai" }
+                    ]
+                },
+                {
+                    id: "teo_dom_cen",
+                    tipo: "Cena",
+                    alimenti: [
+                        { 
+                            emoji: "🥩", 
+                            nome: "Hamburger di carne rossa magra", 
+                            quantita: "150g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "190°C", minuti: "9 min" }
+                        },
+                        { 
+                            emoji: "🥔", 
+                            nome: "Patate a cubetti con la buccia", 
+                            quantita: "150g",
+                            airFryer: { metodo: "Friggitrice ad aria", temp: "200°C", minuti: "15-20 min" }
+                        },
+                        { emoji: "🫘", nome: "Fagioli cannellini in scatola", quantita: "150g" },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "2,5 cucchiai" }
+                    ]
+                }
             ]
         };
 
         const giorniSettimana = ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
+        
+        // Giorno reale di oggi
         const oggi = new Date();
-        const nomeGiornoOggi = giorniSettimana[oggi.getDay()];
-        const stringaDataOggi = oggi.toISOString().split('T')[0];
+        const nomeGiornoReale = giorniSettimana[oggi.getDay()];
+        const stringaDataReale = oggi.toISOString().split('T')[0];
 
-        document.getElementById("live-day-badge").innerText = nomeGiornoOggi;
+        // Giorno correntemente visualizzato dall'utente (inizialmente oggi)
+        let giornoVisualizzato = nomeGiornoReale;
 
-        const pastiDelGiorno = dietaTeo[nomeGiornoOggi] || [];
-        const container = document.getElementById("pasti-container");
-        const docRef = doc(db, "diete", "teo"); // Collezione e documento per Teo
+        // Riferimento Firestore secondo la REGOLA 1
+        const appId = "webapp-dieta";
+        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'diete', 'teo');
 
-        async function initApp() {
-            let statiCheckbox = {};
+        // Apri popup selezione giorno
+        window.openDayModal = function() {
+            renderDayModalOptions();
+            document.getElementById("day-modal").classList.add("active");
+        };
 
-            try {
-                const docSnap = await getDoc(docRef);
+        // Chiudi popup selezione giorno
+        window.closeDayModal = function() {
+            document.getElementById("day-modal").classList.remove("active");
+        };
+
+        window.closeDayModalOutside = function(e) {
+            if (e.target.id === "day-modal") {
+                closeDayModal();
+            }
+        };
+
+        // Cambia il giorno visualizzato
+        window.selezionaGiorno = function(giorno) {
+            giornoVisualizzato = giorno;
+            closeDayModal();
+            caricaEInizializzaPasti();
+        };
+
+        // Visualizza i dettagli della friggitrice ad aria
+        window.mostraCottura = function(nomeCibo, metodo, temp, minuti) {
+            document.getElementById("cooking-food-title").innerText = nomeCibo;
+            const container = document.getElementById("cooking-details-body");
+            container.innerHTML = `
+                <div class="cooking-detail-item">
+                    <span>💨 Metodo di cottura: <strong>${metodo}</strong></span>
+                </div>
+                <div class="cooking-detail-item">
+                    <span>🌡️ Temperatura: <strong>${temp}</strong></span>
+                </div>
+                <div class="cooking-detail-item">
+                    <span>⏱️ Minuti di cottura: <strong>${minuti}</strong></span>
+                </div>
+            `;
+            document.getElementById("cooking-modal").classList.add("active");
+        };
+
+        window.closeCookingModal = function() {
+            document.getElementById("cooking-modal").classList.remove("active");
+        };
+
+        window.closeCookingModalOutside = function(e) {
+            if (e.target.id === "cooking-modal") {
+                closeCookingModal();
+            }
+        };
+
+        // Genera la lista dei giorni all'interno del menu di selezione (Stile Screenshot 1)
+        function renderDayModalOptions() {
+            const container = document.getElementById("day-options-container");
+            container.innerHTML = "";
+
+            // Giorni ordinati da Lunedì a Domenica
+            const giorniOrdinati = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"];
+            
+            giorniOrdinati.forEach(giorno => {
+                const isActive = (giorno === giornoVisualizzato);
+                const isRealToday = (giorno === nomeGiornoReale);
                 
-                if (docSnap.exists()) {
-                    const datiCloud = docSnap.data();
-                    if (datiCloud.last_date !== stringaDataOggi) {
-                        await setDoc(docRef, { last_date: stringaDataOggi, pasti: {} });
-                    } else {
-                        statiCheckbox = datiCloud.pasti || {};
-                    }
-                } else {
-                    await setDoc(docRef, { last_date: stringaDataOggi, pasti: {} });
-                }
-            } catch (e) {
-                console.log("Firestore offline o configurazione mancante.");
+                const btn = document.createElement("button");
+                btn.className = `day-option ${isActive ? 'active' : ''}`;
+                btn.onclick = () => selezionaGiorno(giorno);
+                
+                btn.innerHTML = `
+                    <span>${giorno}</span>
+                    ${isRealToday ? '<span style="font-size: 0.7rem; background: rgba(0,223,130,0.15); padding: 4px 8px; border-radius: 6px; color: var(--accent);">OGGI</span>' : ''}
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        // Funzione principale di rendering e logica di rete
+        async function caricaEInizializzaPasti() {
+            const isToday = (giornoVisualizzato === nomeGiornoReale);
+            
+            // Aggiorna interfaccia superiore
+            document.getElementById("badge-text").innerText = giornoVisualizzato;
+            
+            // Gestione avviso sola lettura
+            const notice = document.getElementById("read-only-notice");
+            if (!isToday) {
+                notice.style.display = "flex";
+                notice.querySelector('span:last-child').innerText = `Sola Lettura. I pasti del ${giornoVisualizzato} non sono modificabili (oggi è ${nomeGiornoReale}).`;
+            } else {
+                notice.style.display = "none";
             }
 
+            let statiCheckbox = {};
+
+            // Recupera lo stato da Firestore solo se stiamo guardando oggi
+            if (isToday) {
+                try {
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        const datiCloud = docSnap.data();
+                        // Se la data salvata è diversa da oggi, resettiamo le checkbox per la nuova giornata
+                        if (datiCloud.last_date !== stringaDataReale) {
+                            await setDoc(docRef, { last_date: stringaDataReale, pasti: {} });
+                        } else {
+                            statiCheckbox = datiCloud.pasti || {};
+                        }
+                    } else {
+                        // Crea documento iniziale
+                        await setDoc(docRef, { last_date: stringaDataReale, pasti: {} });
+                    }
+                } catch (e) {
+                    console.log("Firestore offline o errore di connessione.");
+                }
+            }
+
+            // Render dei pasti del giorno selezionato
+            const pastiDelGiorno = dietaTeo[giornoVisualizzato] || [];
+            const container = document.getElementById("pasti-container");
+            container.innerHTML = "";
+
             pastiDelGiorno.forEach(pasto => {
-                const isChecked = statiCheckbox[pasto.id] || false;
+                const isChecked = isToday ? (statiCheckbox[pasto.id] || false) : false;
                 
                 const card = document.createElement("div");
                 card.id = `card-${pasto.id}`;
                 card.className = `pasto-card ${isChecked ? 'completed' : ''}`;
-                
+
+                // Generazione della lista dei singoli cibi all'interno del pasto
+                let alimentiHTML = "";
+                pasto.alimenti.forEach(alimento => {
+                    const haAirfryer = !!alimento.airFryer;
+                    const clickAttr = haAirfryer 
+                        ? `onclick="mostraCottura('${alimento.nome.replace(/'/g, "\\'")}', '${alimento.airFryer.metodo}', '${alimento.airFryer.temp}', '${alimento.airFryer.minuti}')"` 
+                        : "";
+                    const airfryerFlame = haAirfryer ? `<span class="airfryer-badge" ${clickAttr}>🔥</span>` : "";
+
+                    alimentiHTML += `
+                        <div class="alimento-row">
+                            <span class="alimento-dot">•</span>
+                            <span class="alimento-emoji">${alimento.emoji}</span>
+                            <span class="alimento-nome ${haAirfryer ? 'clickable' : ''}" ${clickAttr}>
+                                ${alimento.nome}
+                            </span>
+                            ${airfryerFlame}
+                            <span class="alimento-leader"></span>
+                            <span class="alimento-quantita">${alimento.quantita}</span>
+                        </div>
+                    `;
+                });
+
                 card.innerHTML = `
-                    <div class="pasto-content">
-                        <span class="pasto-label">${pasto.tipo || "Cena"}</span>
-                        <span class="pasto-desc">${pasto.desc}</span>
+                    <div class="pasto-main-content">
+                        <span class="pasto-label">${pasto.tipo}</span>
+                        <div class="alimenti-list">
+                            ${alimentiHTML}
+                        </div>
                     </div>
                     <div class="checkbox-container">
-                        <input type="checkbox" id="${pasto.id}" ${isChecked ? 'checked' : ''}>
+                        <input type="checkbox" id="check-${pasto.id}" ${isChecked ? 'checked' : ''} ${!isToday ? 'disabled' : ''}>
                         <span class="custom-checkmark"></span>
                     </div>
                 `;
-                
+
                 container.appendChild(card);
 
-                const input = card.querySelector('input');
-                input.addEventListener('change', async (e) => {
-                    const checked = e.target.checked;
-                    if(checked) {
-                        card.classList.add('completed');
-                    } else {
-                        card.classList.remove('completed');
-                    }
-                    
-                    try {
-                        await updateDoc(docRef, {
-                            [`pasti.${pasto.id}`]: checked
-                        });
-                    } catch(err) {
-                        console.error("Errore salvataggio Firebase:", err);
-                    }
-                });
+                // Aggiungi event listener solo per il giorno corrente
+                if (isToday) {
+                    const input = card.querySelector(`input[type="checkbox"]`);
+                    input.addEventListener('change', async (e) => {
+                        const checked = e.target.checked;
+                        if (checked) {
+                            card.classList.add('completed');
+                        } else {
+                            card.classList.remove('completed');
+                        }
+
+                        try {
+                            await updateDoc(docRef, {
+                                [`pasti.${pasto.id}`]: checked
+                            });
+                        } catch (err) {
+                            console.error("Errore nel salvataggio su Firebase:", err);
+                        }
+                    });
+                }
             });
         }
 
-        initApp();
+        // Avvio dell'app su carica pagina
+        window.onload = function() {
+            caricaEInizializzaPasti();
+        };
     </script>
 </body>
 </html>
