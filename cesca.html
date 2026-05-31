@@ -40,9 +40,10 @@
             padding: calc(var(--safe-top) + 24px) 24px calc(var(--safe-bottom) + 30px) 24px;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
         }
 
-        /* --- NAVIGATION UPPER BAR --- */
+        /* --- NAV BAR --- */
         .nav-top {
             display: flex;
             justify-content: space-between;
@@ -60,15 +61,15 @@
             transition: color 0.2s ease;
         }
 
-        .back-btn:active {
+        .back-btn:hover, .back-btn:active {
             color: var(--accent);
         }
 
-        .day-badge {
+        .day-badge-trigger {
             background: rgba(0, 223, 130, 0.08);
             border: 1px solid rgba(0, 223, 130, 0.2);
             color: var(--accent);
-            padding: 6px 16px;
+            padding: 8px 18px;
             border-radius: 100px;
             font-size: 0.75rem;
             font-weight: 800;
@@ -78,27 +79,43 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .day-badge:active {
-            background: rgba(0, 223, 130, 0.2);
+        .day-badge-trigger:active {
             transform: scale(0.95);
+            background: rgba(0, 223, 130, 0.15);
         }
 
         .profile-title {
-            font-size: 2.2rem;
+            font-size: 2.4rem;
             font-weight: 800;
             letter-spacing: -1.5px;
-            margin-bottom: 32px;
+            margin-bottom: 24px;
             text-transform: uppercase;
         }
 
-        /* --- LISTA PASTI BI-COLONNA PREMIUM --- */
+        /* Banner Stato Sola Lettura */
+        .read-only-banner {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* --- LISTA PASTI --- */
         .pasti-flow {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
         }
 
         .pasto-card {
@@ -109,85 +126,85 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 20px;
+            gap: 16px;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
         }
 
-        .pasto-content {
+        .pasto-main-content {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 14px;
             flex: 1;
-            overflow: hidden;
         }
 
         .pasto-label {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--accent);
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
 
-        .pasto-desc-list {
-            list-style: none;
+        /* Lista Alimenti Interna */
+        .alimenti-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
         }
 
-        .pasto-desc-list li {
+        .alimento-row {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-size: 0.95rem;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 0.9);
-            position: relative;
-            padding-left: 20px;
             width: 100%;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.95);
         }
 
-        /* Pallino Tondo e Pieno Verde Accento Cyber */
-        .pasto-desc-list li::before {
-            content: "•";
-            position: absolute;
-            left: 0;
+        .alimento-dot {
             color: var(--accent);
-            font-size: 0.9rem;
+            font-size: 1.2rem;
+            margin-right: 8px;
             line-height: 1;
+            flex-shrink: 0;
         }
 
-        .pasto-ingredient-name {
+        .alimento-emoji {
+            margin-right: 8px;
+            font-size: 1.1rem;
             flex-shrink: 0;
-            max-width: 65%;
+        }
+
+        .alimento-nome {
+            font-weight: 500;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        /* Puntini di riempimento flessibili (...) */
-        .pasto-dots {
+        /* Tratteggio Leader-dots */
+        .alimento-leader {
             flex-grow: 1;
-            border-bottom: 2px dotted rgba(0, 223, 130, 0.15);
-            margin: 0 8px;
-            transform: translateY(-4px);
+            border-bottom: 2px dotted rgba(82, 107, 107, 0.35);
+            margin: 0 10px;
+            position: relative;
+            top: 4px;
+            height: 1px;
         }
 
-        .pasto-weight {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.9);
+        .alimento-quantita {
             font-weight: 600;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
             flex-shrink: 0;
             text-align: right;
-            white-space: nowrap;
         }
 
-        /* --- PREMIUM CHECKBOX --- */
+        /* --- CHECKBOX PREMIUM --- */
         .checkbox-container {
             position: relative;
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             flex-shrink: 0;
         }
 
@@ -200,30 +217,34 @@
             z-index: 2;
         }
 
+        .checkbox-container input:disabled {
+            cursor: not-allowed;
+        }
+
         .custom-checkmark {
             position: absolute;
             top: 0;
             left: 0;
-            height: 32px;
-            width: 32px;
+            height: 34px;
+            width: 34px;
             background: transparent;
             border: 2px solid var(--border);
-            border-radius: 10px;
-            transition: all 0.2s ease;
+            border-radius: 12px;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .checkbox-container input:checked ~ .custom-checkmark {
             background-color: var(--accent);
             border-color: var(--accent);
-            box-shadow: 0 0 12px rgba(0, 223, 130, 0.3);
+            box-shadow: 0 0 16px rgba(0, 223, 130, 0.35);
         }
 
         .custom-checkmark:after {
             content: "";
             position: absolute;
             display: none;
-            left: 10px;
-            top: 5px;
+            left: 11px;
+            top: 6px;
             width: 6px;
             height: 13px;
             border: solid var(--bg-deep);
@@ -235,70 +256,57 @@
             display: block;
         }
 
-        /* Stile Checkbox Disabilitata (Giorno non corrente) */
-        .checkbox-container input:disabled ~ .custom-checkmark {
-            border-color: var(--text-muted);
-            opacity: 0.25;
-            cursor: not-allowed;
-        }
-
-        /* --- STATUS COMPLETATO --- */
+        /* Stato completato */
         .pasto-card.completed {
             opacity: 0.35;
             border-color: transparent;
-            background: #050d0d;
+            background: rgba(10, 26, 26, 0.4);
         }
 
-        .pasto-card.completed .pasto-desc-list li {
+        .pasto-card.completed .alimento-nome {
             text-decoration: line-through;
             color: var(--text-muted);
         }
 
-        /* Card bloccata visivamente per i giorni non correnti */
-        .pasto-card.locked {
-            border-color: rgba(20, 43, 43, 0.4);
-            background: rgba(10, 26, 26, 0.6);
-        }
-        .pasto-card.locked .pasto-ingredient-name,
-        .pasto-card.locked .pasto-weight {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        /* --- MODAL DI SOVRIMPRESSIONE SELEZIONE GIORNO --- */
-        .day-modal {
+        /* --- FINESTRE MODALI (OVERLAYS) --- */
+        .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(3, 15, 15, 0.96);
-            backdrop-filter: blur(8px);
-            z-index: 1000;
+            background: rgba(3, 15, 15, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 1000;
             opacity: 0;
             pointer-events: none;
-            transition: all 0.25s ease;
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 20px;
         }
 
-        .day-modal.open {
+        .modal-overlay.active {
             opacity: 1;
             pointer-events: auto;
         }
 
-        .modal-content {
+        .modal-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
+            width: 100%;
+            max-width: 380px;
             border-radius: 28px;
-            padding: 24px;
-            width: calc(100% - 48px);
-            max-width: 340px;
-            transform: translateY(16px);
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 28px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            transform: translateY(30px);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
         }
 
-        .day-modal.open .modal-content {
+        .modal-overlay.active .modal-card {
             transform: translateY(0);
         }
 
@@ -306,49 +314,67 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
-        .modal-header h2 {
-            font-size: 1.1rem;
+        .modal-header h3 {
+            font-size: 1.15rem;
             font-weight: 800;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--white);
         }
 
-        .close-btn {
-            background: transparent;
+        .modal-close-btn {
+            background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             cursor: pointer;
-            padding: 4px;
+            line-height: 1;
+            transition: color 0.2s;
         }
 
-        .days-grid {
+        .modal-close-btn:hover {
+            color: var(--white);
+        }
+
+        /* Lista Giorni */
+        .day-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .day-select-btn {
-            background: transparent;
+        .day-option {
+            background: rgba(10, 26, 26, 0.4);
             border: 1px solid var(--border);
             color: var(--white);
-            padding: 14px 18px;
+            padding: 16px 20px;
             border-radius: 16px;
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 600;
             text-align: left;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .day-select-btn:active, .day-select-btn.active {
-            background: rgba(0, 223, 130, 0.08);
+        .day-option.active {
             border-color: var(--accent);
             color: var(--accent);
+            background: rgba(0, 223, 130, 0.05);
+        }
+
+        .day-option:active {
+            transform: scale(0.98);
+            background: rgba(0, 223, 130, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -356,20 +382,27 @@
 
     <div class="nav-top">
         <a href="index.html" class="back-btn">← Home</a>
-        <span id="live-day-badge" class="day-badge">Caricamento... ▾</span>
+        <div id="live-day-badge" class="day-badge-trigger" onclick="openDayModal()">
+            <span id="badge-text">Caricamento...</span> ▾
+        </div>
     </div>
 
     <h1 class="profile-title">Cesca</h1>
 
+    <div id="read-only-notice" class="read-only-banner" style="display: none;">
+        <span>⚠️</span>
+        <span>Sola Lettura. Puoi spuntare i pasti solo nel giorno corrente.</span>
+    </div>
+
     <div id="pasti-container" class="pasti-flow"></div>
 
-    <div id="day-modal" class="day-modal">
-        <div class="modal-content">
+    <div id="day-modal" class="modal-overlay" onclick="closeDayModalOutside(event)">
+        <div class="modal-card">
             <div class="modal-header">
-                <h2>Seleziona Giorno</h2>
-                <button id="close-modal" class="close-btn">&times;</button>
+                <h3>SELEZIONA GIORNO</h3>
+                <button class="modal-close-btn" onclick="closeDayModal()">&times;</button>
             </div>
-            <div class="days-grid" id="days-buttons-container"></div>
+            <div class="day-list" id="day-options-container"></div>
         </div>
     </div>
 
@@ -389,141 +422,415 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // Database Dieta Statica di Cesca Strutturato ad Oggetti singoli
         const dietaCesca = {
             "Lunedì": [
-                { id: "c_lun_col", tipo: "Colazione", desc: "🥐 Brioscine confezionate (2 pz) + 🍪 Biscotti Macine o Gocciole (4 pz)" },
-                { id: "c_lun_pra", tipo: "Pranzo", desc: "🍝 Pasta (80g) + 🐟 Tonno al naturale (120g) + 🍅 Salsa di pomodoro + 🫒 Olio EVO (1,5 cucchiai)" },
-                { id: "c_lun_mer", tipo: "Merenda", desc: "🍿 Croccantelle (1 pacchetto) + 🥐 Brioscina (1 pz)" },
-                { id: "c_lun_cen", tipo: "Cena", desc: "🍗 Pollo sovracosce (150g) + 🥔 Patate al forno (200g) + 🥗 Insalata mista + 🫒 Olio EVO (1 cucchiaio)" },
-                { id: "c_lun_spu", tipo: "Spuntino", desc: "🥪 Panino (60g) + 🥓 Salame crudo (40g)" }
+                {
+                    id: "c_lun_col", tipo: "Colazione",
+                    alimenti: [
+                        { emoji: "🥐", nome: "Brioscine confezionate", quantita: "2 pz" },
+                        { emoji: "🍪", nome: "Biscotti Macine o Gocciole", quantita: "4 pz" }
+                    ]
+                },
+                {
+                    id: "c_lun_pra", tipo: "Pranzo",
+                    alimenti: [
+                        { emoji: "🍝", nome: "Pasta", quantita: "80g" },
+                        { emoji: "🐟", nome: "Tonno al naturale", quantita: "120g" },
+                        { emoji: "🍅", nome: "Salsa di pomodoro", quantita: "q.b." },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "1,5 cucchiai" }
+                    ]
+                },
+                {
+                    id: "c_lun_mer", tipo: "Merenda",
+                    alimenti: [
+                        { emoji: "🍿", nome: "Croccantelle", quantita: "1 pacchetto" },
+                        { emoji: "🥐", nome: "Brioscina", quantita: "1 pz" }
+                    ]
+                },
+                {
+                    id: "c_lun_cen", tipo: "Cena",
+                    alimenti: [
+                        { emoji: "🍗", nome: "Pollo sovracosce", quantita: "150g" },
+                        { emoji: "🥔", nome: "Patate al forno", quantita: "200g" },
+                        { emoji: "🥗", nome: "Insalata mista", quantita: "q.b." },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "1 cucchiaio" }
+                    ]
+                },
+                {
+                    id: "c_lun_spu", tipo: "Spuntino",
+                    alimenti: [
+                        { emoji: "🥪", nome: "Panino", quantita: "60g" },
+                        { emoji: "🥓", nome: "Salame crudo", quantita: "40g" }
+                    ]
+                }
             ],
             "Martedì": [
-                { id: "c_mar_col", tipo: "Colazione", desc: "🥪 Panino al volo (60g) + 🥓 Salame crudo (40g) + 🧀 Provola dolce (30g)" },
-                { id: "c_mar_pra", tipo: "Pranzo", desc: "🍝 Pasta (80g) + 2 Guanciale croccante (30g) + 🥚 Uovo (1 pz) + 🧀 Pecorino (2 cucchiai)" },
-                { id: "c_mar_mer", tipo: "Merenda", desc: "🍦 Gelato artigianale (150g)" },
-                { id: "c_mar_cen", tipo: "Cena", desc: "🥩 Hamburger o bistecca (150g) + 🫛 Fagiolini freschi + 🫒 Olio EVO (2 cucchiai)" },
-                { id: "c_mar_spu", tipo: "Spuntino", desc: "🍪 Biscotti golosi (6 pz)" }
+                {
+                    id: "c_mar_col", tipo: "Colazione",
+                    alimenti: [
+                        { emoji: "🥪", nome: "Panino al volo", quantita: "60g" },
+                        { emoji: "🥓", nome: "Salame crudo", quantita: "40g" },
+                        { emoji: "🧀", nome: "Provola", quantita: "30g" }
+                    ]
+                },
+                {
+                    id: "c_mar_pra", tipo: "Pranzo",
+                    alimenti: [
+                        { emoji: "🍝", nome: "Pasta alla Carbonara", quantita: "80g" },
+                        { emoji: "🥓", nome: "Guanciale", quantita: "30g" },
+                        { emoji: "🥚", nome: "Uovo intero", quantita: "1 pz" },
+                        { emoji: "🧀", nome: "Pecorino", quantita: "2 cucchiai" }
+                    ]
+                },
+                {
+                    id: "c_mar_mer", tipo: "Merenda",
+                    alimenti: [
+                        { emoji: "🍦", nome: "Gelato artigianale (crema/cioccol.)", quantita: "150g" }
+                    ]
+                },
+                {
+                    id: "c_mar_cen", tipo: "Cena",
+                    alimenti: [
+                        { emoji: "🥩", nome: "Hamburger o bistecca carne rossa", quantita: "150g" },
+                        { emoji: "🥬", nome: "Fagiolini verdi", quantita: "q.b." },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "2 cucchiai" }
+                    ]
+                },
+                {
+                    id: "c_mar_spu", tipo: "Spuntino",
+                    alimenti: [
+                        { emoji: "🍪", nome: "Biscotti golosi", quantita: "6 pz" }
+                    ]
+                }
             ],
             "Mercoledì": [
-                { id: "c_mer_col", tipo: "Colazione", desc: "🍪 Biscotti golosi (8 pz)" },
-                { id: "c_mer_pra", tipo: "Pranzo", desc: "𫓴 Piadina intera (120g) + 🥓 Salame crudo (50g) + 🧀 Provola dolce (40g)" },
-                { id: "c_mer_mer", tipo: "Merenda", desc: "🍿 Croccantelle (1 pacchetto) + 🍪 Biscotti (2 pz)" },
-                { id: "c_mer_cen", tipo: "Cena", desc: "🍗 Pollo grigliato (150g) + 🥔 Patate al forno (200g) + 🥒 Cetrioli a piacere + 🫒 Olio EVO (1,5 cucchiai)" },
-                { id: "c_mer_spu", tipo: "Spuntino", desc: "🥐 Brioscina confezionata (1 pz)" }
+                {
+                    id: "c_mer_col", tipo: "Colazione",
+                    alimenti: [
+                        { emoji: "🍪", nome: "Biscotti (al volo)", quantita: "8 pz" }
+                    ]
+                },
+                {
+                    id: "c_mer_pra", tipo: "Pranzo",
+                    alimenti: [
+                        { emoji: "🫓", nome: "Piadina intera", quantita: "120g" },
+                        { emoji: "🥓", nome: "Salame crudo", quantita: "50g" },
+                        { emoji: "🧀", nome: "Provola", quantita: "40g" }
+                    ]
+                },
+                {
+                    id: "c_mer_mer", tipo: "Merenda",
+                    alimenti: [
+                        { emoji: "🍿", nome: "Croccantelle", quantita: "1 pacchetto" },
+                        { emoji: "🍪", nome: "Biscotti", quantita: "2 pz" }
+                    ]
+                },
+                {
+                    id: "c_mer_cen", tipo: "Cena",
+                    alimenti: [
+                        { emoji: "🍗", nome: "Pollo", quantita: "150g" },
+                        { emoji: "🥔", nome: "Patate al forno", quantita: "200g" },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "1,5 cucchiai" },
+                        { emoji: "🥒", nome: "Cetrioli", quantita: "a piacere" }
+                    ]
+                },
+                {
+                    id: "c_mer_spu", tipo: "Spuntino",
+                    alimenti: [
+                        { emoji: "🥐", nome: "Brioscina confezionata", quantita: "1 pz" }
+                    ]
+                }
             ],
             "Giovedì": [
-                { id: "c_gio_col", tipo: "Colazione", desc: "🥐 Brioscine confezionate (2 pz) + 🍪 Biscotti (4 pz)" },
-                { id: "c_gio_pra", tipo: "Pranzo", desc: "🍝 Pasta (80g) + 🐟 Tonno al naturale (120g) + 🍅 Salsa di pomodoro + 🫒 Olio EVO (1,5 cucchiai)" },
-                { id: "c_gio_mer", tipo: "Merenda", desc: "🍦 Gelato artigianale (150g) + 🍿 Croccantelle (1 pacchetto)" },
-                { id: "c_gio_cen", tipo: "Cena", desc: "🥩 Carne rossa magra (150g) + 🫛 Fagiolini freschi + 🫒 Olio EVO (2 cucchiai)" },
-                { id: "c_gio_spu", tipo: "Spuntino", desc: "🥪 Panino (60g) + 2 Confezioni di Salame (40g)" }
+                {
+                    id: "c_gio_col", tipo: "Colazione",
+                    alimenti: [
+                        { emoji: "🥐", nome: "Brioscine confezionate", quantita: "2 pz" },
+                        { emoji: "🍪", nome: "Biscotti", quantita: "4 pz" }
+                    ]
+                },
+                {
+                    id: "c_gio_pra", tipo: "Pranzo",
+                    alimenti: [
+                        { emoji: "🍝", nome: "Pasta", quantita: "80g" },
+                        { emoji: "🐟", nome: "Tonno al naturale", quantita: "120g" },
+                        { emoji: "🍅", nome: "Salsa di pomodoro", quantita: "q.b." },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "1,5 cucchiai" }
+                    ]
+                },
+                {
+                    id: "c_gio_mer", tipo: "Merenda",
+                    alimenti: [
+                        { emoji: "🍦", nome: "Gelato artigianale", quantita: "150g" },
+                        { emoji: "🍿", nome: "Croccantelle", quantita: "1 pacchetto" }
+                    ]
+                },
+                {
+                    id: "c_gio_cen", tipo: "Cena",
+                    alimenti: [
+                        { emoji: "🥩", nome: "Carne rossa magra", quantita: "150g" },
+                        { emoji: "🥬", nome: "Fagiolini verdi", quantita: "q.b." },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "2 cucchiai" }
+                    ]
+                },
+                {
+                    id: "c_gio_spu", tipo: "Spuntino",
+                    alimenti: [
+                        { emoji: "🥪", nome: "Panino", quantita: "60g" },
+                        { emoji: "🥓", nome: "Salame crudo", quantita: "40g" }
+                    ]
+                }
             ],
             "Venerdì": [
-                { id: "c_ven_col", tipo: "Colazione", desc: "🥪 Panino al volo (60g) + 🥓 Salame crudo (40g) + 🧀 Provola dolce (30g)" },
-                { id: "c_ven_pra", tipo: "Pranzo", desc: "🍝 Pasta (80g) + 2 Guanciale croccante (30g) + 🥚 Uovo (1 pz) + 🧀 Pecorino (2 cucchiai)" },
-                { id: "c_ven_mer", tipo: "Merenda", desc: "🥐 Brioscina (1 pz) + 🍪 Biscotti (3 pz)" },
-                { id: "c_ven_cen", tipo: "Cena", desc: "🍕 Pizza Margherita (1 pz) + 2 Aggiunta Salame o Provola" },
-                { id: "c_ven_spu", tipo: "Spuntino", desc: "🍿 Croccantelle (1 pacchetto)" }
+                {
+                    id: "c_ven_col", tipo: "Colazione",
+                    alimenti: [
+                        { emoji: "🥪", nome: "Panino al volo", quantita: "60g" },
+                        { emoji: "🥓", nome: "Salame crudo", quantita: "40g" },
+                        { emoji: "🧀", nome: "Provola", quantita: "30g" }
+                    ]
+                },
+                {
+                    id: "c_ven_pra", tipo: "Pranzo",
+                    alimenti: [
+                        { emoji: "🍝", nome: "Pasta alla Carbonara", quantita: "80g" },
+                        { emoji: "🥓", nome: "Guanciale", quantita: "30g" },
+                        { emoji: "🥚", nome: "Uovo", quantita: "1 pz" },
+                        { emoji: "🧀", nome: "Pecorino", quantita: "q.b." }
+                    ]
+                },
+                {
+                    id: "c_ven_mer", tipo: "Merenda",
+                    alimenti: [
+                        { emoji: "🥐", nome: "Brioscina", quantita: "1 pz" },
+                        { emoji: "🍪", nome: "Biscotti", quantita: "3 pz" }
+                    ]
+                },
+                {
+                    id: "c_ven_cen", tipo: "Cena",
+                    alimenti: [
+                        { emoji: "🍕", nome: "Pizza margherita intera", quantita: "1 pz" },
+                        { emoji: "➕", nome: "Aggiunta salame/provola sopra", quantita: "q.b." }
+                    ]
+                },
+                {
+                    id: "c_ven_spu", tipo: "Spuntino",
+                    alimenti: [
+                        { emoji: "🍿", nome: "Croccantelle", quantita: "1 pacchetto" }
+                    ]
+                }
             ],
             "Sabato": [
-                { id: "c_sab_col", tipo: "Colazione", desc: "🍪 Biscotti golosi (8 pz)" },
-                { id: "c_sab_pra", tipo: "Pranzo", desc: "𫓴 Piadina intera (120g) + 🥓 Salame crudo (50g) + 🧀 Provola dolce (40g)" },
-                { id: "c_sab_mer", tipo: "Merenda", desc: "🍦 Una coppetta media di Gelato artigianale" },
-                { id: "c_sab_cen", tipo: "Cena", desc: "🥩 Carne rossa (150g) + 🥔 Patate in padella (200g) + 🥗 Insalata mista + 🫒 Olio EVO (1 cucchiaio)" },
-                { id: "c_sab_spu", tipo: "Spuntino", desc: "🥪 Panino (60g) + 2 Salame crudo (40g)" }
+                {
+                    id: "c_sab_col", tipo: "Colazione",
+                    alimenti: [
+                        { emoji: "🍪", nome: "Biscotti", quantita: "8 pz" }
+                    ]
+                },
+                {
+                    id: "c_sab_pra", tipo: "Pranzo",
+                    alimenti: [
+                        { emoji: "🫓", nome: "Piadina intera", quantita: "120g" },
+                        { emoji: "🥓", nome: "Salame crudo", quantita: "50g" },
+                        { emoji: "🧀", nome: "Provola", quantita: "40g" }
+                    ]
+                },
+                {
+                    id: "c_sab_mer", tipo: "Merenda",
+                    alimenti: [
+                        { emoji: "🍦", nome: "Gelato artigianale", quantita: "150g" }
+                    ]
+                },
+                {
+                    id: "c_sab_cen", tipo: "Cena",
+                    alimenti: [
+                        { emoji: "🥩", nome: "Carne rossa", quantita: "150g" },
+                        { emoji: "🥔", nome: "Patate in padella", quantita: "200g" },
+                        { emoji: "🥗", nome: "Insalata mista", quantita: "q.b." },
+                        { emoji: "🫒", nome: "Olio EVO", quantita: "1 cucchiaio" }
+                    ]
+                },
+                {
+                    id: "c_sab_spu", tipo: "Spuntino",
+                    alimenti: [
+                        { emoji: "🥪", nome: "Panino", quantita: "60g" },
+                        { emoji: "🥓", nome: "Salame crudo", quantita: "40g" }
+                    ]
+                }
             ],
             "Domenica": [
-                { id: "c_dom_col", tipo: "Colazione", desc: "🥐 Brioscine confezionate (2 pz) + 🍪 Biscotti (4 pz)" },
-                { id: "c_dom_pra", tipo: "Pranzo", desc: "🍝 Primo piatto preferito (80g)" },
-                { id: "c_dom_mer", tipo: "Merenda", desc: "🍿 Croccantelle (1 pacchetto) + 🥐 Brioscina (1 pz)" },
-                { id: "c_dom_cen", tipo: "Cena", desc: "🥚 Uova all'occhio o Frittata (2 pz) + 🥔 Patate cotte (200g) + 🥒 Cetriolini a piacere" },
-                { id: "c_dom_spu", tipo: "Spuntino", desc: "🍪 Biscotti golosi (6 pz)" }
+                {
+                    id: "c_dom_col", tipo: "Colazione",
+                    alimenti: [
+                        { emoji: "🥐", nome: "Brioscine confezionate", quantita: "2 pz" },
+                        { emoji: "🍪", nome: "Biscotti", quantita: "4 pz" }
+                    ]
+                },
+                {
+                    id: "c_dom_pra", tipo: "Pranzo",
+                    alimenti: [
+                        { emoji: "🍝", nome: "Primo preferito (Tonno/Carbonara)", quantita: "80g pasta" }
+                    ]
+                },
+                {
+                    id: "c_dom_mer", tipo: "Merenda",
+                    alimenti: [
+                        { emoji: "🍿", nome: "Croccantelle", quantita: "1 pacchetto" },
+                        { emoji: "🥐", nome: "Brioscina", quantita: "1 pz" }
+                    ]
+                },
+                {
+                    id: "c_dom_cen", tipo: "Cena",
+                    alimenti: [
+                        { emoji: "🥚", nome: "Uova (occhio bue o frittata)", quantita: "2 pz" },
+                        { emoji: "🥔", nome: "Patate", quantita: "200g" },
+                        { emoji: "🥒", nome: "Cetriolini", quantita: "a piacere" }
+                    ]
+                },
+                {
+                    id: "c_dom_spu", tipo: "Spuntino",
+                    alimenti: [
+                        { emoji: "🍪", nome: "Biscotti", quantita: "6 pz" }
+                    ]
+                }
             ]
         };
 
         const giorniSettimana = ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
         const oggi = new Date();
-        const nomeGiornoOggi = giorniSettimana[oggi.getDay()];
-        const stringaDataOggi = oggi.toISOString().split('T')[0];
+        const nomeGiornoReale = giorniSettimana[oggi.getDay()];
+        const stringaDataReale = oggi.toISOString().split('T')[0];
 
-        let databaseStatiCheckbox = {}; 
-        const container = document.getElementById("pasti-container");
-        const badgeGiorno = document.getElementById("live-day-badge");
+        let giornoVisualizzato = nomeGiornoReale;
         const docRef = doc(db, "diete", "cesca");
 
-        const modal = document.getElementById("day-modal");
-        const btnChiudiModal = document.getElementById("close-modal");
-        const containerBottoniGiorni = document.getElementById("days-buttons-container");
+        window.openDayModal = function() {
+            renderDayModalOptions();
+            document.getElementById("day-modal").classList.add("active");
+        };
 
-        function renderizzaPastiGiorno(giornoSelezionato) {
-            container.innerHTML = ""; 
-            badgeGiorno.innerText = `${giornoSelezionato} ▾`;
+        window.closeDayModal = function() {
+            document.getElementById("day-modal").classList.remove("active");
+        };
 
-            const isToday = (giornoSelezionato === nomeGiornoOggi);
-            const pastiDelGiorno = dietaCesca[giornoSelezionato] || [];
+        window.closeDayModalOutside = function(e) {
+            if (e.target.id === "day-modal") closeDayModal();
+        };
+
+        window.selezionaGiorno = function(giorno) {
+            giornoVisualizzato = giorno;
+            closeDayModal();
+            caricaEInizializzaPasti();
+        };
+
+        function renderDayModalOptions() {
+            const container = document.getElementById("day-options-container");
+            container.innerHTML = "";
+            const giorniOrdinati = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"];
+            
+            giorniOrdinati.forEach(giorno => {
+                const isActive = (giorno === giornoVisualizzato);
+                const isRealToday = (giorno === nomeGiornoReale);
+                
+                const btn = document.createElement("button");
+                btn.className = `day-option ${isActive ? 'active' : ''}`;
+                btn.onclick = () => selezionaGiorno(giorno);
+                
+                btn.innerHTML = `
+                    <span>${giorno}</span>
+                    ${isRealToday ? '<span style="font-size: 0.7rem; background: rgba(0,223,130,0.15); padding: 4px 8px; border-radius: 6px; color: var(--accent);">OGGI</span>' : ''}
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        async function caricaEInizializzaPasti() {
+            const isToday = (giornoVisualizzato === nomeGiornoReale);
+            document.getElementById("badge-text").innerText = giornoVisualizzato;
+            
+            const notice = document.getElementById("read-only-notice");
+            if (!isToday) {
+                notice.style.display = "flex";
+                notice.querySelector('span:last-child').innerText = `Sola Lettura. I pasti del ${giornoVisualizzato} non sono modificabili (oggi è ${nomeGiornoReale}).`;
+            } else {
+                notice.style.display = "none";
+            }
+
+            let statiCheckbox = {};
+
+            if (isToday) {
+                try {
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        const datiCloud = docSnap.data();
+                        if (datiCloud.last_date !== stringaDataReale) {
+                            await setDoc(docRef, { last_date: stringaDataReale, pasti: {} });
+                        } else {
+                            statiCheckbox = datiCloud.pasti || {};
+                        }
+                    } else {
+                        await setDoc(docRef, { last_date: stringaDataReale, pasti: {} });
+                    }
+                } catch (e) {
+                    console.log("Firestore offline o non configurato.");
+                }
+            }
+
+            const pastiDelGiorno = dietaCesca[giornoVisualizzato] || [];
+            const container = document.getElementById("pasti-container");
+            container.innerHTML = "";
 
             pastiDelGiorno.forEach(pasto => {
-                const isChecked = databaseStatiCheckbox[pasto.id] || false;
+                const isChecked = isToday ? (statiCheckbox[pasto.id] || false) : false;
                 
                 const card = document.createElement("div");
                 card.id = `card-${pasto.id}`;
-                card.className = `pasto-card ${isChecked ? 'completed' : ''} ${isToday ? '' : 'locked'}`;
-                
-                const ingredientiRAW = pasto.desc.split('+');
-                const ingredientiHTML = ingredientiRAW.map(elemento => {
-                    let name = elemento.trim();
-                    let qty = '';
+                card.className = `pasto-card ${isChecked ? 'completed' : ''}`;
 
-                    const regExp = /\(([^)]+)\)/;
-                    const match = name.match(regExp);
-                    if (match) {
-                        qty = match[1]; 
-                        name = name.replace(regExp, '').trim(); 
-                    }
-
-                    const dotsHTML = qty ? '<span class="pasto-dots"></span>' : '';
-
-                    return `
-                        <li>
-                            <span class="pasto-ingredient-name">${name}</span>
-                            ${dotsHTML}
-                            <span class="pasto-weight">${qty}</span>
-                        </li>
+                let alimentiHTML = "";
+                pasto.alimenti.forEach(alimento => {
+                    alimentiHTML += `
+                        <div class="alimento-row">
+                            <span class="alimento-dot">•</span>
+                            <span class="alimento-emoji">${alimento.emoji}</span>
+                            <span class="alimento-nome">${alimento.nome}</span>
+                            <span class="alimento-leader"></span>
+                            <span class="alimento-quantita">${alimento.quantita}</span>
+                        </div>
                     `;
-                }).join('');
+                });
 
                 card.innerHTML = `
-                    <div class="pasto-content">
+                    <div class="pasto-main-content">
                         <span class="pasto-label">${pasto.tipo}</span>
-                        <ul class="pasto-desc-list">
-                            ${ingredientiHTML}
-                        </ul>
+                        <div class="alimenti-list">
+                            ${alimentiHTML}
+                        </div>
                     </div>
                     <div class="checkbox-container">
-                        <input type="checkbox" id="${pasto.id}" ${isChecked ? 'checked' : ''} ${isToday ? '' : 'disabled'}>
+                        <input type="checkbox" id="check-${pasto.id}" ${isChecked ? 'checked' : ''} ${!isToday ? 'disabled' : ''}>
                         <span class="custom-checkmark"></span>
                     </div>
                 `;
-                
+
                 container.appendChild(card);
 
                 if (isToday) {
-                    const input = card.querySelector('input');
+                    const input = card.querySelector(`input[type="checkbox"]`);
                     input.addEventListener('change', async (e) => {
                         const checked = e.target.checked;
-                        databaseStatiCheckbox[pasto.id] = checked; 
-                        
-                        if(checked) {
+                        if (checked) {
                             card.classList.add('completed');
                         } else {
                             card.classList.remove('completed');
                         }
-                        
+
                         try {
                             await updateDoc(docRef, {
                                 [`pasti.${pasto.id}`]: checked
                             });
-                        } catch(err) {
+                        } catch (err) {
                             console.error("Errore salvataggio Firebase:", err);
                         }
                     });
@@ -531,62 +838,8 @@
             });
         }
 
-        async function initApp() {
-            try {
-                const docSnap = await getDoc(docRef);
-                
-                if (docSnap.exists()) {
-                    const datiCloud = docSnap.data();
-                    if (datiCloud.last_date !== stringaDataOggi) {
-                        await setDoc(docRef, { last_date: stringaDataOggi, pasti: {} });
-                    } else {
-                        databaseStatiCheckbox = datiCloud.pasti || {};
-                    }
-                } else {
-                    await setDoc(docRef, { last_date: stringaDataOggi, pasti: {} });
-                }
-            } catch (e) {
-                console.log("Firebase Offline. Fallback locale attivo.");
-            }
-
-            renderizzaPastiGiorno(nomeGiornoOggi);
-            generaBottoniModal();
-        }
-
-        badgeGiorno.addEventListener('click', () => {
-            modal.classList.add('open');
-        });
-
-        btnChiudiModal.addEventListener('click', () => {
-            modal.classList.remove('open');
-        });
-
-        modal.addEventListener('click', (e) => {
-            if(e.target === modal) modal.classList.remove('open');
-        });
-
-        function generaBottoniModal() {
-            containerBottoniGiorni.innerHTML = "";
-            const giorniOrdinati = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"];
-            
-            giorniOrdinati.forEach(giorno => {
-                const bottone = document.createElement("button");
-                bottone.className = `day-select-btn ${giorno === nomeGiornoOggi ? 'active' : ''}`;
-                bottone.innerText = giorno;
-                
-                bottone.addEventListener('click', () => {
-                    document.querySelectorAll('.day-select-btn').forEach(b => b.classList.remove('active'));
-                    bottone.classList.add('active');
-                    
-                    renderizzaPastiGiorno(giorno);
-                    modal.classList.remove('open');
-                });
-                
-                containerBottoniGiorni.appendChild(bottone);
-            });
-        }
-
-        initApp();
+        // Avvia l'app direttamente senza attendere window.onload (più sicuro nei moduli)
+        caricaEInizializzaPasti();
     </script>
 </body>
 </html>
