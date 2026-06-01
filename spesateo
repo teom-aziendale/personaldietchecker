@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Teo — Lista Spesa</title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-deep: #030f0f;
+            --accent: #00df82;
+            --white: #ffffff;
+            --card-bg: #0a1a1a;
+            --border: #142b2b;
+            --text-muted: #526b6b;
+            
+            --safe-top: env(safe-area-inset-top, 20px);
+            --safe-bottom: env(safe-area-inset-bottom, 20px);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--white);
+            min-height: 100vh;
+            padding: calc(var(--safe-top) + 24px) 24px calc(var(--safe-bottom) + 30px) 24px;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* --- NAV BAR --- */
+        .nav-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .back-btn {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            transition: color 0.2s ease;
+        }
+
+        .back-btn:hover, .back-btn:active {
+            color: var(--accent);
+        }
+
+        .profile-title {
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        /* --- CARTE DELLA SPESA --- */
+        .spesa-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .spesa-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 24px;
+            border-radius: 24px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .spesa-main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .spesa-label {
+            font-size: 0.75rem;
+            color: var(--accent);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        /* Lista Alimenti Interna */
+        .alimenti-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .alimento-row {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .alimento-dot {
+            color: var(--accent);
+            font-size: 1.2rem;
+            margin-right: 8px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .alimento-emoji {
+            margin-right: 8px;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .alimento-nome {
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Tratteggio dinamico */
+        .alimento-leader {
+            flex-grow: 1;
+            border-bottom: 2px dotted rgba(82, 107, 107, 0.35);
+            margin: 0 10px;
+            position: relative;
+            top: 4px;
+            height: 1px;
+        }
+
+        .alimento-quantita {
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-top">
+        <a href="index.html" class="back-btn">← Home</a>
+    </div>
+
+    <h1 class="profile-title">Spesa Settimanale Teo</h1>
+
+    <div class="spesa-flow">
+
+        <div class="spesa-card">
+            <div class="spesa-main-content">
+                <span class="spesa-label">🥩 Fonti Proteiche</span>
+                <div class="alimenti-list">
+                    <div class="alimento-row">
+                        <span class="alimento-dot">•</span>
+                        <span class="alimento-emoji">🍳</span>
+                        <span class="alimento-nome">Uova</span>
+                        <span class="alimento-leader"></span>
+                        <span class="alimento-quantita">8 pz</span>
+                    </div>
+                    <div class="alimento-row">
+                        <span class="alimento-dot">•</span>
+                        <span class="alimento-emoji">🍗</span>
+                        <span class="alimento-nome">Pollo</span>
+                        <span class="alimento-leader"></span>
+                        <span class="alimento-quantita">300g</span>
+                    </div>
+                    <div class="alimento-row">
+                        <span class="alimento-dot">•</span>
+                        <span class="alimento-emoji">🥩</span>
+                        <span class="alimento-nome">Hamburger di carne</span>
+                        <span class="alimento-leader"></span>
+                        <span class="alimento-quantita">300g</span>
+                    </div>
+                    <div class="alimento-row">
+                        <span class="alimento-dot">•</span>
+                        <span class="alimento-emoji">🐟</span>
+                        <span class="alimento-nome">Tonno</span>
+                        <span class="alimento-leader"></span>
+                        <span class="alimento-quantita">240g</span>
+                    </div>
+                    <div class="alimento-row">
+                        <span class="alimento-dot">•</span>
+                        <span class="alimento-emoji">🐟</span>
+                        <span class="alimento-nome">Pesce panato</span>
+                        <span class="alimento-leader"></span>
+                        <span class="alimento-quantita">2 pz</span>
+                    </div>
+                    <div class="alimento-row">
+                        <span class="alimento-dot">•</span>
+                        <span class="alimento-emoji">🫘</span>
+                        <span class="alimento-nome">Fagioli</span>
+                        <span class="alimento-leader"></span>
+                        <span class="alimento-quantita">450g</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="spesa-card">
+            <div class="spesa-main-content">
+                <span class="spesa-label">🍝 Carboidrati e Cereali</span>
+                <div class="alimenti-list">
+                    <div class="alimento-row">
+                        <span class="alimento-dot">•</span>
+                        <span class="alimento-emoji">🍝</span>
+                        <span class="alimento-nome">Pasta Integrale</span>
+                        <span class="alimento-leader"></span>
+                        <span class="alimento-quantita">320g</span>
+                    </div>
+                    <div class="alimento-row">
+                        <span class="alimento-dot">•</span>
+                        <span class="alimento-emoji">🥔</span>
+                        <span class="alimento-nome">Patate</span>
+                        <span class="alimento-leader"></span>
+                        <span class="alimento-quantita">450g</span>
+                    </div>
+                    <div class="alimento-row">
+                        <span class="alimento-dot">•</span>
+                        <span class="alimento-emoji">🍞</span>
+                        <span class="alimento-nome">Pane</span>
+                        <span class="alimento-leader"></span>
+                        <span class="alimento-quantita">1 conf</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="spesa-card">
+            <div class="spesa-main-content">
+                <span class="spesa-label">🍏 Frutta, Verdura e Basi</span>
+                <div class="alimenti-list">
+                    <div class="alimento-row">
+                        <span class="alimento-dot">•</span>
+                        <span class="alimento-emoji">🥒</span>
+                        <span class="alimento-nome">Vellutata</span>
+                        <span class="alimento-leader"></span>
+                        <span class="alimento-quantita">600g</span>
+                    </div>
+                    <div class="alimento-row">
+                        <span class="alimento-dot">•</span>
+                        <span class="alimento-emoji">🍎</span>
+                        <span class="alimento-nome">Mela</span>
+                        <span class="alimento-leader"></span>
+                        <span class="alimento-quantita">2 pz</span>
+                    </div>
+                    <div class="alimento-row">
+                        <span class="alimento-dot">•</span>
+                        <span class="alimento-emoji">🍌</span>
+                        <span class="alimento-nome">Banana</span>
+                        <span class="alimento-leader"></span>
+                        <span class="alimento-quantita">2 pz</span>
+                    </div>
+                    <div class="alimento-row">
+                        <span class="alimento-dot">•</span>
+                        <span class="alimento-emoji">🥗</span>
+                        <span class="alimento-nome">Insalata</span>
+                        <span class="alimento-leader"></span>
+                        <span class="alimento-quantita">1 conf</span>
+                    </div>
+                    <div class="alimento-row">
+                        <span class="alimento-dot">•</span>
+                        <span class="alimento-emoji">🍅</span>
+                        <span class="alimento-nome">Salsa di pomodoro</span>
+                        <span class="alimento-leader"></span>
+                        <span class="alimento-quantita">1 bottiglia</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="spesa-card">
+            <div class="spesa-main-content">
+                <span class="spesa-label">🫒 Grassi, Condimenti e Latticini</span>
+                <div class="alimenti-list">
+                    <div class="alimento-row">
+                        <span class="alimento-dot">•</span>
+                        <span class="alimento-emoji">🥜</span>
+                        <span class="alimento-nome">Mandorle / Noci</span>
+                        <span class="alimento-leader"></span>
+                        <span class="alimento-quantita">60g</span>
+                    </div>
+                    <div class="alimento-row">
+                        <span class="alimento-dot">•</span>
+                        <span class="alimento-emoji">🫒</span>
+                        <span class="alimento-nome">Olio d'oliva</span>
+                        <span class="alimento-leader"></span>
+                        <span class="alimento-quantita">15 cucchiai</span>
+                    </div>
+                    <div class="alimento-row">
+                        <span class="alimento-dot">•</span>
+                        <span class="alimento-emoji">🧀</span>
+                        <span class="alimento-nome">Formaggio grattugiato</span>
+                        <span class="alimento-leader"></span>
+                        <span class="alimento-quantita">1 cucchiaio</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
