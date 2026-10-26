@@ -663,6 +663,7 @@
 
     <div id="admin-toolbar" class="admin-toolbar">
         <button class="btn-primary" onclick="aggiungiNuovoPasto()">+ Aggiungi Pasto</button>
+        <button class="btn-secondary" onclick="applicaNuovoPianoTeo()">Carica piano aggiornato</button>
         <button class="btn-secondary" onclick="doLogout()">Esci da Admin</button>
     </div>
 
@@ -732,338 +733,755 @@
         // Da qui in poi il contenuto reale vive su Firestore (campo "piano") e si modifica dal pannello Admin.
         const dietaDefaultTeo = {
             "Lunedì": [
-                {
-                    id: "teo_lun_col",
-                    tipo: "Colazione",
-                    alimenti: [
-                        { emoji: "🍳", nome: "Uova", quantita: "2 pz" },
-                        { emoji: "🍞", nome: "Pane", quantita: "2 pz" },
-                        { emoji: "🥜", nome: "Mandorle o Noci", quantita: "15g" },
-                        { emoji: "🍎", nome: "Mela", quantita: "1 pz" }
-                    ]
-                },
-                {
-                    id: "teo_lun_pra",
-                    tipo: "Pranzo",
-                    alimenti: [
-                        { emoji: "🍝", nome: "Pasta Integrale", quantita: "80g" },
-                        { emoji: "🐟", nome: "Tonno", quantita: "120g" },
-                        { emoji: "🍅", nome: "Salsa", quantita: "q.b." },
-                        { 
-                            emoji: "🥒", 
-                            nome: "Vellutata", 
-                            quantita: "300g",
-                            airFryer: { metodo: "Microonde", temp: "800 w", minuti: "2 min" }
+                        {
+                                    "id": "teo_lun_col",
+                                    "tipo": "Colazione",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🥣",
+                                                            "nome": "Cornflakes",
+                                                            "quantita": "50g"
+                                                },
+                                                {
+                                                            "emoji": "🥛",
+                                                            "nome": "Latte",
+                                                            "quantita": "250ml"
+                                                },
+                                                {
+                                                            "emoji": "🍫",
+                                                            "nome": "Cioccolato fondente",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { emoji: "🫒", nome: "Olio", quantita: "1,5 cucchiai" }
-                    ]
-                },
-                {
-                    id: "teo_lun_cen",
-                    tipo: "Cena",
-                    alimenti: [
-                        { 
-                            emoji: "🥩", 
-                            nome: "Hamburger carne", 
-                            quantita: "150g",
-                            airFryer: { metodo: "Friggitrice", temp: "190°C", minuti: "9 min" }
+                        {
+                                    "id": "teo_lun_sm",
+                                    "tipo": "Spuntino metà mattina",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍪",
+                                                            "nome": "Biscotti digestive",
+                                                            "quantita": "2 pz"
+                                                },
+                                                {
+                                                            "emoji": "🥜",
+                                                            "nome": "Frutta secca",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { 
-                            emoji: "🥔", 
-                            nome: "Patate ", 
-                            quantita: "150g",
-                            airFryer: { metodo: "Friggitrice", temp: "200°C", minuti: "15-20 min" }
+                        {
+                                    "id": "teo_lun_pra",
+                                    "tipo": "Pranzo",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🌾",
+                                                            "nome": "Couscous",
+                                                            "quantita": "70g"
+                                                },
+                                                {
+                                                            "emoji": "🍗",
+                                                            "nome": "Pollo/tacchino",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🥕",
+                                                            "nome": "Passato di verdure",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🫒",
+                                                            "nome": "Olio",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { emoji: "🫘", nome: "Fagioli", quantita: "150g" },
-                        { emoji: "🫒", nome: "Olio", quantita: "2,5 cucchiai" }
-                    ]
-                }
+                        {
+                                    "id": "teo_lun_sp",
+                                    "tipo": "Spuntino pomeriggio",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍪",
+                                                            "nome": "Biscotti digestive",
+                                                            "quantita": "2 pz"
+                                                },
+                                                {
+                                                            "emoji": "🥜",
+                                                            "nome": "Frutta secca",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
+                        },
+                        {
+                                    "id": "teo_lun_cen",
+                                    "tipo": "Cena",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍞",
+                                                            "nome": "Pane",
+                                                            "quantita": "100g"
+                                                },
+                                                {
+                                                            "emoji": "🫘",
+                                                            "nome": "Fagioli",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🥦",
+                                                            "nome": "Verdure",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🫒",
+                                                            "nome": "Olio",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
+                        }
             ],
             "Martedì": [
-                {
-                    id: "teo_mar_col",
-                    tipo: "Colazione",
-                    alimenti: [
-                        { emoji: "🍳", nome: "Uova", quantita: "2 pz" },
-                        { emoji: "🍞", nome: "Pane", quantita: "2 pz" },
-                        { emoji: "🥜", nome: "Mandorle", quantita: "15g" },
-                        { emoji: "🍌", nome: "Banana", quantita: "1 pz" }
-                    ]
-                },
-                {
-                    id: "teo_mar_pra",
-                    tipo: "Pranzo",
-                    alimenti: [
-                        { emoji: "🍝", nome: "Pasta Integrale", quantita: "80g" },
-                        { 
-                            emoji: "🍗", 
-                            nome: "Pollo", 
-                            quantita: "130g",
-                            airFryer: { metodo: "Friggitrice", temp: "190°C", minuti: "10-12 min" }
+                        {
+                                    "id": "teo_mar_col",
+                                    "tipo": "Colazione",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍞",
+                                                            "nome": "Pane",
+                                                            "quantita": "75g"
+                                                },
+                                                {
+                                                            "emoji": "🥜",
+                                                            "nome": "Burro d'arachidi",
+                                                            "quantita": "da definire"
+                                                },
+                                                {
+                                                            "emoji": "🍫",
+                                                            "nome": "Cioccolato fondente",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { emoji: "🥗", nome: "Insalata", quantita: "q.b." },
-                        { emoji: "🫒", nome: "Olio", quantita: "1,5 cucchiai" }
-                    ]
-                },
-                {
-                    id: "teo_mar_cen",
-                    tipo: "Cena",
-                    alimenti: [
-                        { 
-                            emoji: "🐟", 
-                            nome: "Pesce panato", 
-                            quantita: "2 pz",
-                            airFryer: { metodo: "Friggitrice", temp: "200°C", minuti: "10 min" }
+                        {
+                                    "id": "teo_mar_sm",
+                                    "tipo": "Spuntino metà mattina",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍪",
+                                                            "nome": "Biscotti digestive",
+                                                            "quantita": "2 pz"
+                                                },
+                                                {
+                                                            "emoji": "🥜",
+                                                            "nome": "Frutta secca",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { 
-                            emoji: "🥔", 
-                            nome: "Patate", 
-                            quantita: "150g",
-                            airFryer: { metodo: "Friggitrice", temp: "200°C", minuti: "15-20 min" }
+                        {
+                                    "id": "teo_mar_pra",
+                                    "tipo": "Pranzo",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍝",
+                                                            "nome": "Pasta",
+                                                            "quantita": "70g"
+                                                },
+                                                {
+                                                            "emoji": "🍳",
+                                                            "nome": "Uova",
+                                                            "quantita": "2 pz"
+                                                },
+                                                {
+                                                            "emoji": "🍅",
+                                                            "nome": "Salsa",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🫒",
+                                                            "nome": "Olio",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { emoji: "🫘", nome: "Fagioli", quantita: "150g" },
-                        { emoji: "🫒", nome: "Olio", quantita: "3,5 cucchiai" }
-                    ]
-                }
+                        {
+                                    "id": "teo_mar_sp",
+                                    "tipo": "Spuntino pomeriggio",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍪",
+                                                            "nome": "Biscotti digestive",
+                                                            "quantita": "2 pz"
+                                                },
+                                                {
+                                                            "emoji": "🥜",
+                                                            "nome": "Frutta secca",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
+                        },
+                        {
+                                    "id": "teo_mar_cen",
+                                    "tipo": "Cena",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🥔",
+                                                            "nome": "Gnocchi",
+                                                            "quantita": "150g"
+                                                },
+                                                {
+                                                            "emoji": "🧀",
+                                                            "nome": "Fiocchi di latte",
+                                                            "quantita": "220g"
+                                                },
+                                                {
+                                                            "emoji": "🍅",
+                                                            "nome": "Salsa",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🫒",
+                                                            "nome": "Olio",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
+                        }
             ],
             "Mercoledì": [
-                {
-                    id: "teo_mer_col",
-                    tipo: "Colazione",
-                    alimenti: [
-                        { emoji: "🍳", nome: "Uova", quantita: "2 pz" },
-                        { emoji: "🍞", nome: "Pane", quantita: "60g" },
-                        { emoji: "🥜", nome: "Mandorle", quantita: "15g" },
-                        { emoji: "🍎", nome: "Mela", quantita: "1 pz" }
-                    ]
-                },
-                {
-                    id: "teo_mer_pra",
-                    tipo: "Pranzo",
-                    alimenti: [
-                        { emoji: "🍝", nome: "Pasta Integrale", quantita: "80g" },
-                        { emoji: "🐟", nome: "Tonno", quantita: "120g" },
-                        { emoji: "🍅", nome: "Salsa", quantita: "q.b." },
-                        { 
-                            emoji: "🥒", 
-                            nome: "Vellutata", 
-                            quantita: "300g",
-                            airFryer: { metodo: "Microonde", temp: "800 w", minuti: "2 min" }
+                        {
+                                    "id": "teo_mer_col",
+                                    "tipo": "Colazione",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🥣",
+                                                            "nome": "Cornflakes",
+                                                            "quantita": "50g"
+                                                },
+                                                {
+                                                            "emoji": "🥛",
+                                                            "nome": "Latte",
+                                                            "quantita": "250ml"
+                                                },
+                                                {
+                                                            "emoji": "🍫",
+                                                            "nome": "Cioccolato fondente",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { emoji: "🫒", nome: "Olio", quantita: "1,5 cucchiai" }
-                    ]
-                },
-                {
-                    id: "teo_mer_cen",
-                    tipo: "Cena",
-                    alimenti: [
-                        { 
-                            emoji: "🍗", 
-                            nome: "Pollo", 
-                            quantita: "150g",
-                            airFryer: { metodo: "Friggitrice", temp: "190°C", minuti: "15 min" }
+                        {
+                                    "id": "teo_mer_sm",
+                                    "tipo": "Spuntino metà mattina",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍪",
+                                                            "nome": "Biscotti digestive",
+                                                            "quantita": "2 pz"
+                                                },
+                                                {
+                                                            "emoji": "🥜",
+                                                            "nome": "Frutta secca",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { 
-                            emoji: "🥔", 
-                            nome: "Patate", 
-                            quantita: "150g",
-                            airFryer: { metodo: "Friggitrice", temp: "200°C", minuti: "15-20 min" }
+                        {
+                                    "id": "teo_mer_pra",
+                                    "tipo": "Pranzo",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🌾",
+                                                            "nome": "Couscous",
+                                                            "quantita": "70g"
+                                                },
+                                                {
+                                                            "emoji": "🐟",
+                                                            "nome": "Tonno",
+                                                            "quantita": "100g"
+                                                },
+                                                {
+                                                            "emoji": "🍅",
+                                                            "nome": "Salsa",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🫒",
+                                                            "nome": "Olio",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { emoji: "🫘", nome: "Fagioli", quantita: "150g" },
-                        { emoji: "🫒", nome: "Olio", quantita: "3 cucchiai" }
-                    ]
-                }
+                        {
+                                    "id": "teo_mer_sp",
+                                    "tipo": "Spuntino pomeriggio",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍪",
+                                                            "nome": "Biscotti digestive",
+                                                            "quantita": "2 pz"
+                                                },
+                                                {
+                                                            "emoji": "🥜",
+                                                            "nome": "Frutta secca",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
+                        },
+                        {
+                                    "id": "teo_mer_cen",
+                                    "tipo": "Cena",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍞",
+                                                            "nome": "Pane",
+                                                            "quantita": "100g"
+                                                },
+                                                {
+                                                            "emoji": "🫘",
+                                                            "nome": "Fagioli",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🥦",
+                                                            "nome": "Verdure",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🫒",
+                                                            "nome": "Olio",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
+                        }
             ],
             "Giovedì": [
-                {
-                    id: "teo_gio_col",
-                    tipo: "Colazione",
-                    alimenti: [
-                        { emoji: "🍳", nome: "Uova", quantita: "2 pz" },
-                        { emoji: "🍞", nome: "Pane", quantita: "2 pz" },
-                        { emoji: "🥜", nome: "Mandorle", quantita: "15g" },
-                        { emoji: "🍌", nome: "Banana", quantita: "1 pz" }
-                    ]
-                },
-                {
-                    id: "teo_gio_pra",
-                    tipo: "Pranzo",
-                    alimenti: [
-                        { emoji: "🍝", nome: "Pasta Integrale", quantita: "80g" },
-                        { emoji: "🍅", nome: "Salsa", quantita: "q.b." },
-                        { emoji: "🧀", nome: "Formaggio", quantita: "1 cucchiaio" },
-                        { 
-                            emoji: "🥩", 
-                            nome: "Hamburger carne", 
-                            quantita: "120g",
-                            airFryer: { metodo: "Friggitrice", temp: "190°C", minuti: "9 min" }
+                        {
+                                    "id": "teo_gio_col",
+                                    "tipo": "Colazione",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍞",
+                                                            "nome": "Pane",
+                                                            "quantita": "75g"
+                                                },
+                                                {
+                                                            "emoji": "🥜",
+                                                            "nome": "Burro d'arachidi",
+                                                            "quantita": "da definire"
+                                                },
+                                                {
+                                                            "emoji": "🍫",
+                                                            "nome": "Cioccolato fondente",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { emoji: "🫒", nome: "Olio", quantita: "1,5 cucchiai" }
-                    ]
-                },
-                {
-                    id: "teo_gio_cen",
-                    tipo: "Cena",
-                    alimenti: [
-                        { 
-                            emoji: "🐟", 
-                            nome: "Pesce panato", 
-                            quantita: "2 pz",
-                            airFryer: { metodo: "Friggitrice", temp: "200°C", minuti: "10 min" }
+                        {
+                                    "id": "teo_gio_sm",
+                                    "tipo": "Spuntino metà mattina",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍪",
+                                                            "nome": "Biscotti digestive",
+                                                            "quantita": "2 pz"
+                                                },
+                                                {
+                                                            "emoji": "🥜",
+                                                            "nome": "Frutta secca",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { 
-                            emoji: "🥔", 
-                            nome: "Patate", 
-                            quantita: "150g",
-                            airFryer: { metodo: "Friggitrice", temp: "200°C", minuti: "15-20 min" }
+                        {
+                                    "id": "teo_gio_pra",
+                                    "tipo": "Pranzo",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🌾",
+                                                            "nome": "Couscous",
+                                                            "quantita": "70g"
+                                                },
+                                                {
+                                                            "emoji": "🥩",
+                                                            "nome": "Carne rossa",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🥕",
+                                                            "nome": "Passato di verdure",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🫒",
+                                                            "nome": "Olio",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { emoji: "🥗", nome: "Insalata", quantita: "q.b." },
-                        { emoji: "🫒", nome: "Olio", quantita: "3,5 cucchiai" }
-                    ]
-                }
+                        {
+                                    "id": "teo_gio_sp",
+                                    "tipo": "Spuntino pomeriggio",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍪",
+                                                            "nome": "Biscotti digestive",
+                                                            "quantita": "2 pz"
+                                                },
+                                                {
+                                                            "emoji": "🥜",
+                                                            "nome": "Frutta secca",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
+                        },
+                        {
+                                    "id": "teo_gio_cen",
+                                    "tipo": "Cena",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🥔",
+                                                            "nome": "Gnocchi",
+                                                            "quantita": "150g"
+                                                },
+                                                {
+                                                            "emoji": "🧀",
+                                                            "nome": "Fiocchi di latte",
+                                                            "quantita": "220g"
+                                                },
+                                                {
+                                                            "emoji": "🥕",
+                                                            "nome": "Passato di verdure",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🫒",
+                                                            "nome": "Olio",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
+                        }
             ],
             "Venerdì": [
-                {
-                    id: "teo_ven_col",
-                    tipo: "Colazione",
-                    alimenti: [
-                        { emoji: "🍳", nome: "Uova", quantita: "2 pz" },
-                        { emoji: "🍞", nome: "Pane", quantita: "2 pz" },
-                        { emoji: "🥜", nome: "Mandorle", quantita: "15g" },
-                        { emoji: "🍎", nome: "Mela", quantita: "1 pz" }
-                    ]
-                },
-                {
-                    id: "teo_ven_pra",
-                    tipo: "Pranzo",
-                    alimenti: [
-                        { emoji: "🍝", nome: "Pasta Integrale", quantita: "80g" },
-                        { emoji: "🐟", nome: "Tonno", quantita: "120g" },
-                        { 
-                            emoji: "🥒", 
-                            nome: "Vellutata", 
-                            quantita: "300g",
-                            airFryer: { metodo: "Microonde", temp: "800 w", minuti: "2 min" }
+                        {
+                                    "id": "teo_ven_col",
+                                    "tipo": "Colazione",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🥣",
+                                                            "nome": "Cornflakes",
+                                                            "quantita": "50g"
+                                                },
+                                                {
+                                                            "emoji": "🥛",
+                                                            "nome": "Latte",
+                                                            "quantita": "250ml"
+                                                },
+                                                {
+                                                            "emoji": "🍫",
+                                                            "nome": "Cioccolato fondente",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { emoji: "🫒", nome: "Olio EVO", quantita: "1,5 cucchiai" }
-                    ]
-                },
-                {
-                    id: "teo_ven_cen",
-                    tipo: "Cena",
-                    alimenti: [
-                        { 
-                            emoji: "🥩", 
-                            nome: "Hamburger carne", 
-                            quantita: "150g",
-                            airFryer: { metodo: "Friggitrice", temp: "190°C", minuti: "9 min" }
+                        {
+                                    "id": "teo_ven_sm",
+                                    "tipo": "Spuntino metà mattina",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍪",
+                                                            "nome": "Biscotti digestive",
+                                                            "quantita": "2 pz"
+                                                },
+                                                {
+                                                            "emoji": "🥜",
+                                                            "nome": "Frutta secca",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { emoji: "🫘", nome: "Fagioli", quantita: "150g" },
-                        { 
-                            emoji: "🥔", 
-                            nome: "Patate", 
-                            quantita: "150g",
-                            airFryer: { metodo: "Friggitrice", temp: "200°C", minuti: "15-20 min" }
+                        {
+                                    "id": "teo_ven_pra",
+                                    "tipo": "Pranzo",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🌾",
+                                                            "nome": "Couscous",
+                                                            "quantita": "70g"
+                                                },
+                                                {
+                                                            "emoji": "🐟",
+                                                            "nome": "Sgombro",
+                                                            "quantita": "100g"
+                                                },
+                                                {
+                                                            "emoji": "🍅",
+                                                            "nome": "Salsa",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🫒",
+                                                            "nome": "Olio",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { emoji: "🫒", nome: "Olio", quantita: "2,5 cucchiai" }
-                    ]
-                }
+                        {
+                                    "id": "teo_ven_sp",
+                                    "tipo": "Spuntino pomeriggio",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍪",
+                                                            "nome": "Biscotti digestive",
+                                                            "quantita": "2 pz"
+                                                },
+                                                {
+                                                            "emoji": "🥜",
+                                                            "nome": "Frutta secca",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
+                        },
+                        {
+                                    "id": "teo_ven_cen",
+                                    "tipo": "Cena",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍞",
+                                                            "nome": "Pane",
+                                                            "quantita": "100g"
+                                                },
+                                                {
+                                                            "emoji": "🫘",
+                                                            "nome": "Fagioli",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🥦",
+                                                            "nome": "Verdure",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🫒",
+                                                            "nome": "Olio",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
+                        }
             ],
             "Sabato": [
-                {
-                    id: "teo_sab_col",
-                    tipo: "Colazione",
-                    alimenti: [
-                        { emoji: "🍳", nome: "Uova", quantita: "2 pz" },
-                        { emoji: "🍞", nome: "Pane", quantita: "2 pz" },
-                        { emoji: "🥜", nome: "Mandorle", quantita: "15g" },
-                        { emoji: "🍌", nome: "Banana", quantita: "1 pz" }
-                    ]
-                },
-                {
-                    id: "teo_sab_pra",
-                    tipo: "Pranzo",
-                    alimenti: [
-                        { emoji: "🍝", nome: "Pasta Integrale", quantita: "80g" },
-                        { 
-                            emoji: "🍗", 
-                            nome: "Pollo", 
-                            quantita: "130g",
-                            airFryer: { metodo: "Friggitrice", temp: "190°C", minuti: "10-12 min" }
+                        {
+                                    "id": "teo_sab_col",
+                                    "tipo": "Colazione",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍞",
+                                                            "nome": "Pane",
+                                                            "quantita": "75g"
+                                                },
+                                                {
+                                                            "emoji": "🥜",
+                                                            "nome": "Burro d'arachidi",
+                                                            "quantita": "da definire"
+                                                },
+                                                {
+                                                            "emoji": "🍫",
+                                                            "nome": "Cioccolato fondente",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { 
-                            emoji: "🥒", 
-                            nome: "Vellutata", 
-                            quantita: "300g",
-                            airFryer: { metodo: "Microonde", temp: "800 w", minuti: "2 min" }
+                        {
+                                    "id": "teo_sab_sm",
+                                    "tipo": "Spuntino metà mattina",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍪",
+                                                            "nome": "Biscotti digestive",
+                                                            "quantita": "2 pz"
+                                                },
+                                                {
+                                                            "emoji": "🥜",
+                                                            "nome": "Frutta secca",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { emoji: "🫒", nome: "Olio", quantita: "1,5 cucchiai" }
-                    ]
-                },
-                {
-                    id: "teo_sab_cen",
-                    tipo: "Cena",
-                    alimenti: [
-                        { 
-                            emoji: "🍗", 
-                            nome: "Pollo", 
-                            quantita: "150g",
-                            airFryer: { metodo: "Friggitrice", temp: "190°C", minuti: "15 min" }
+                        {
+                                    "id": "teo_sab_pra",
+                                    "tipo": "Pranzo",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍝",
+                                                            "nome": "Pasta",
+                                                            "quantita": "70g"
+                                                },
+                                                {
+                                                            "emoji": "🍳",
+                                                            "nome": "Uova",
+                                                            "quantita": "2 pz"
+                                                },
+                                                {
+                                                            "emoji": "🍅",
+                                                            "nome": "Salsa",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🫒",
+                                                            "nome": "Olio",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { 
-                            emoji: "🥔", 
-                            nome: "Patate", 
-                            quantita: "150g",
-                            airFryer: { metodo: "Friggitrice", temp: "200°C", minuti: "15-20 min" }
+                        {
+                                    "id": "teo_sab_sp",
+                                    "tipo": "Spuntino pomeriggio",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍪",
+                                                            "nome": "Biscotti digestive",
+                                                            "quantita": "2 pz"
+                                                },
+                                                {
+                                                            "emoji": "🥜",
+                                                            "nome": "Frutta secca",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { emoji: "🫘", nome: "Fagioli", quantita: "150g" },
-                        { emoji: "🫒", nome: "Olio", quantita: "3 cucchiai" }
-                    ]
-                }
+                        {
+                                    "id": "teo_sab_cen",
+                                    "tipo": "Cena",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍞",
+                                                            "nome": "Pane",
+                                                            "quantita": "100g"
+                                                },
+                                                {
+                                                            "emoji": "🫘",
+                                                            "nome": "Fagioli",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🥦",
+                                                            "nome": "Verdure",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🫒",
+                                                            "nome": "Olio",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
+                        }
             ],
             "Domenica": [
-                {
-                    id: "teo_dom_col",
-                    tipo: "Colazione",
-                    alimenti: [
-                        { emoji: "🍳", nome: "Uova", quantita: "2 pz" },
-                        { emoji: "🍞", nome: "Pane", quantita: "2 pz" },
-                        { emoji: "🥜", nome: "Mandorle", quantita: "15g" },
-                        { emoji: "🍎", nome: "Mela", quantita: "1 pz" }
-                    ]
-                },
-                {
-                    id: "teo_dom_pra",
-                    tipo: "Pranzo",
-                    alimenti: [
-                        { emoji: "🍝", nome: "Pasta Integrale", quantita: "80g" },
-                        { emoji: "🐟", nome: "Tonno", quantita: "120g" },
-                        { emoji: "🥗", nome: "Insalata", quantita: "q.b." },
-                        { emoji: "🫒", nome: "Olio", quantita: "1,5 cucchiai" }
-                    ]
-                },
-                {
-                    id: "teo_dom_cen",
-                    tipo: "Cena",
-                    alimenti: [
-                        { 
-                            emoji: "🥩", 
-                            nome: "Hamburger carne", 
-                            quantita: "150g",
-                            airFryer: { metodo: "Friggitrice", temp: "190°C", minuti: "9 min" }
+                        {
+                                    "id": "teo_dom_col",
+                                    "tipo": "Colazione",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🥣",
+                                                            "nome": "Cornflakes",
+                                                            "quantita": "50g"
+                                                },
+                                                {
+                                                            "emoji": "🥛",
+                                                            "nome": "Latte",
+                                                            "quantita": "250ml"
+                                                },
+                                                {
+                                                            "emoji": "🍫",
+                                                            "nome": "Cioccolato fondente",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { 
-                            emoji: "🥔", 
-                            nome: "Patate", 
-                            quantita: "150g",
-                            airFryer: { metodo: "Friggitrice", temp: "200°C", minuti: "15-20 min" }
+                        {
+                                    "id": "teo_dom_sm",
+                                    "tipo": "Spuntino metà mattina",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍪",
+                                                            "nome": "Biscotti digestive",
+                                                            "quantita": "2 pz"
+                                                },
+                                                {
+                                                            "emoji": "🥜",
+                                                            "nome": "Frutta secca",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
                         },
-                        { emoji: "🫘", nome: "Fagioli", quantita: "150g" },
-                        { emoji: "🫒", nome: "Olio", quantita: "2,5 cucchiai" }
-                    ]
-                }
+                        {
+                                    "id": "teo_dom_pra",
+                                    "tipo": "Pranzo",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🌾",
+                                                            "nome": "Couscous",
+                                                            "quantita": "70g"
+                                                },
+                                                {
+                                                            "emoji": "🍗",
+                                                            "nome": "Pollo/tacchino",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🥕",
+                                                            "nome": "Passato di verdure",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🫒",
+                                                            "nome": "Olio",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
+                        },
+                        {
+                                    "id": "teo_dom_sp",
+                                    "tipo": "Spuntino pomeriggio",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🍪",
+                                                            "nome": "Biscotti digestive",
+                                                            "quantita": "2 pz"
+                                                },
+                                                {
+                                                            "emoji": "🥜",
+                                                            "nome": "Frutta secca",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
+                        },
+                        {
+                                    "id": "teo_dom_cen",
+                                    "tipo": "Cena",
+                                    "alimenti": [
+                                                {
+                                                            "emoji": "🥔",
+                                                            "nome": "Gnocchi",
+                                                            "quantita": "150g"
+                                                },
+                                                {
+                                                            "emoji": "🧀",
+                                                            "nome": "Fiocchi di latte",
+                                                            "quantita": "220g"
+                                                },
+                                                {
+                                                            "emoji": "🍅",
+                                                            "nome": "Salsa",
+                                                            "quantita": "200g"
+                                                },
+                                                {
+                                                            "emoji": "🫒",
+                                                            "nome": "Olio",
+                                                            "quantita": "10g"
+                                                }
+                                    ]
+                        }
             ]
-        };
+};
 
         const giorniSettimana = ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
         
@@ -1265,6 +1683,22 @@
 
             renderPasti(statiCheckbox, isToday);
         }
+
+        // Sovrascrive il piano salvato su Firestore con quello aggiornato (solo admin, con conferma)
+        window.applicaNuovoPianoTeo = async function() {
+            if (!auth.currentUser) { alert("Devi essere loggato come admin."); return; }
+            if (!confirm("Sostituire TUTTO il piano di Teo con il nuovo piano aggiornato? I pasti attuali verranno sovrascritti.")) return;
+            try {
+                pianoData = JSON.parse(JSON.stringify(dietaDefaultTeo));
+                await updateDoc(docRef, { piano: pianoData, pasti: {} });
+                editingPastoId = null;
+                await caricaEInizializzaPasti();
+                alert("Piano aggiornato.");
+            } catch (e) {
+                alert("Errore durante il salvataggio. Controlla la connessione e riprova.");
+                console.error(e);
+            }
+        };
 
         async function salvaPianoGiorno() {
             try {
