@@ -2,7 +2,8 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#051211">
     <title>Personal Diet Checker</title>
 
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -11,7 +12,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     <link rel="apple-touch-icon" href="favicon.jpg">
 
@@ -198,6 +199,198 @@
             100% { transform: scale(1); opacity: 1; }
         }
     </style>
+<!-- restyle-2026 -->
+<style id="restyle-2026">
+/* ============================================================
+   RESTYLE 2026 — nuova veste grafica (solo estetica, nessuna funzione cambiata).
+   Per tornare al look precedente: cancella questo blocco <style id="restyle-2026">
+   oppure usa le copie in _backup/prima-restyling-2026-10-26/
+   ============================================================ */
+:root {
+  --bg-deep: #051211;
+  --card-bg: #0b1c1b;
+  --border: #1f3a38;
+  --text-muted: #8ca6a2;
+  --surface-2: #122726;
+  --ink: #03130d;
+  --danger: #ff7a7a;
+  --font-num: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --gutter-l: max(20px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(20px, env(safe-area-inset-right, 0px));
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--bg-deep);
+  background-image: radial-gradient(120% 46% at 50% -8%, rgba(0, 223, 130, 0.11), transparent 62%);
+  background-repeat: no-repeat;
+  padding-left: var(--gutter-l);
+  padding-right: var(--gutter-r);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+button, a, .day-badge-trigger, .day-option { touch-action: manipulation; }
+
+/* ---------- Barra in alto ---------- */
+.nav-top { margin-bottom: 20px; }
+.back-btn {
+  display: inline-flex; align-items: center; min-height: 44px;
+  margin-left: -12px; padding: 0 16px 0 12px; border-radius: 999px;
+  font-size: 0.9375rem; font-weight: 700; letter-spacing: 0; text-transform: none;
+  color: var(--text-muted); transition: color .2s ease, background-color .2s ease;
+}
+.back-btn:hover, .back-btn:active { color: var(--white); background: var(--surface-2); }
+
+.day-badge-trigger {
+  min-height: 44px; padding: 0 18px; border-radius: 999px;
+  font-size: 0.8125rem; letter-spacing: 0.04em;
+  background: rgba(0, 223, 130, 0.12); border-color: rgba(0, 223, 130, 0.28);
+  transition: background-color .2s ease, transform .15s ease;
+}
+.admin-btn {
+  width: 44px; height: 44px; border-radius: 999px; background: var(--surface-2);
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+}
+
+.profile-title {
+  font-size: clamp(2rem, 9vw, 2.5rem); line-height: 1.02;
+  letter-spacing: -0.045em; margin-bottom: 20px; text-wrap: balance;
+}
+
+/* ---------- Avviso sola lettura: neutro, non è un errore ---------- */
+.read-only-banner {
+  background: var(--surface-2); border: 1px solid var(--border); color: var(--white);
+  border-radius: 16px; padding: 12px 14px; font-size: 0.875rem; font-weight: 600;
+  line-height: 1.4; margin-bottom: 20px; align-items: flex-start; gap: 10px;
+}
+.read-only-banner svg { flex: none; margin-top: 2px; color: var(--text-muted); }
+
+/* ---------- Carte dei pasti e della spesa ---------- */
+.pasti-flow, .spesa-flow { gap: 14px; }
+.pasto-card, .spesa-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  padding: 20px; border-radius: 22px; box-shadow: none;
+  transition: border-color .25s ease, background-color .25s ease;
+}
+.pasto-card { align-items: flex-start; gap: 8px; }
+.pasto-main-content, .spesa-main-content { gap: 16px; }
+.pasto-label, .spesa-label {
+  font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; color: var(--accent);
+}
+.alimenti-list { gap: 12px; }
+.alimento-row { font-size: 1rem; color: var(--white); min-height: 32px; }
+.alimento-dot { display: none; }
+.alimento-emoji {
+  width: 32px; height: 32px; margin-right: 12px; display: grid; place-items: center;
+  background: var(--surface-2); border-radius: 10px; font-size: 1rem; line-height: 1; flex-shrink: 0;
+}
+.alimento-nome { font-weight: 600; }
+.alimento-leader { border-bottom: 1.5px dotted rgba(140, 166, 162, 0.28); margin: 0 10px; }
+.alimento-left-block ~ .alimento-leader { align-self: center; height: 0; transform: translateY(3px); }
+.alimento-quantita {
+  font-family: var(--font-num); font-variant-numeric: tabular-nums;
+  font-weight: 500; font-size: 0.875rem; color: var(--text-muted);
+}
+
+/* ---------- Spunta: cerchio, area di tocco 48px ---------- */
+.checkbox-container { width: 48px; height: 48px; margin: -6px -6px 0 0; }
+.custom-checkmark {
+  top: 8px; left: 8px; width: 32px; height: 32px; border-radius: 50%;
+  border: 2px solid #2d504d;
+  transition: background-color .2s ease, border-color .2s ease, transform .15s ease;
+}
+.checkbox-container input:active ~ .custom-checkmark { transform: scale(.9); }
+.checkbox-container input:checked ~ .custom-checkmark { box-shadow: none; }
+.custom-checkmark:after { left: 9px; top: 4px; border-color: var(--ink); }
+.checkbox-container input:focus-visible ~ .custom-checkmark { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* ---------- Pasto completato: resta leggibile ---------- */
+.pasto-card.completed {
+  opacity: 1;
+  border-color: color-mix(in srgb, var(--accent) 38%, var(--border));
+  background: color-mix(in srgb, var(--accent) 6%, var(--card-bg));
+}
+.pasto-card.completed .alimento-nome { color: var(--text-muted); text-decoration-color: rgba(140, 166, 162, 0.5); }
+.pasto-card.completed .alimento-emoji { opacity: .6; }
+.pasto-card.completed .alimento-quantita { opacity: .7; }
+
+/* ---------- Finestre: pannelli dal basso ---------- */
+.modal-overlay { align-items: flex-end; justify-content: center; padding: 0; background: rgba(2, 10, 9, 0.72); }
+.modal-card {
+  max-width: 480px; border-radius: 28px 28px 0 0; border-bottom: 0;
+  padding: 10px 20px calc(24px + env(safe-area-inset-bottom, 0px));
+  box-shadow: none; transform: translateY(100%);
+  transition: transform .35s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: 88vh; overflow-y: auto; overscroll-behavior: contain;
+}
+.modal-card::before {
+  content: ""; display: block; width: 40px; height: 4px; border-radius: 4px;
+  background: var(--border); margin: 0 auto 14px;
+}
+.modal-overlay.active .modal-card { transform: translateY(0); }
+.modal-header { margin-bottom: 16px; }
+.modal-header h3 { font-size: 1rem; letter-spacing: 0.04em; }
+.modal-close-btn { width: 44px; height: 44px; display: grid; place-items: center; margin-right: -10px; border-radius: 999px; }
+.day-list { gap: 10px; }
+.day-option {
+  min-height: 52px; border-radius: 16px; background: var(--surface-2);
+  transition: background-color .2s ease, border-color .2s ease, transform .15s ease;
+}
+.day-option.active { background: rgba(0, 223, 130, 0.1); }
+.cooking-detail-item { background: var(--surface-2); }
+
+/* ---------- Pulsanti e campi ---------- */
+.btn-primary, .btn-secondary, .btn-danger, .btn-modal-submit, .modal-action-btn {
+  min-height: 48px; border-radius: 14px; font-size: 0.9375rem; padding: 0 20px;
+  transition: background-color .2s ease, transform .15s ease;
+}
+.btn-primary, .btn-modal-submit, .modal-action-btn { color: var(--ink); }
+.btn-secondary { background: var(--surface-2); }
+.btn-danger { color: var(--danger); background: rgba(255, 122, 122, 0.1); border-color: rgba(255, 122, 122, 0.25); }
+.btn-primary:active, .btn-modal-submit:active { transform: scale(.97); }
+.login-input, .edit-row input, .input-titolo-pasto {
+  min-height: 48px; font-size: 1rem; border-radius: 14px; background: var(--surface-2);
+}
+.login-input:focus, .edit-row input:focus, .input-titolo-pasto:focus { outline: none; border-color: var(--accent); }
+.edit-row .input-cook { font-size: 1rem; }
+.icon-btn, .btn-remove-row { width: 40px; height: 40px; border-radius: 12px; }
+.btn-remove-row, .login-error { color: var(--danger); }
+
+/* ---------- Home ---------- */
+.logo-svg { width: 88px; height: 88px; animation: float 5s ease-in-out infinite; }
+.header-main { margin-bottom: 40px; }
+.header-main h1 { font-size: clamp(2rem, 11vw, 2.75rem); letter-spacing: -0.045em; }
+.subtitle { color: var(--text-muted); }
+.profile-container { gap: 14px; }
+.profile-card {
+  padding: 28px 16px 24px; border-radius: 24px; gap: 14px; min-height: 48px;
+  transition: border-color .25s ease, background-color .25s ease, transform .15s ease;
+}
+.profile-img { width: 76px; height: 76px; border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
+.profile-card:active { transform: scale(0.97); box-shadow: none; background: color-mix(in srgb, var(--accent) 6%, var(--card-bg)); }
+.profile-card:active .profile-img { filter: none; }
+.spesa-button {
+  min-height: 64px; margin-top: 14px; border-radius: 24px; padding: 0 22px; justify-content: space-between;
+  transition: border-color .25s ease, background-color .25s ease, transform .15s ease;
+}
+.spesa-button::after { content: "→"; color: var(--accent); font-weight: 700; }
+.spesa-button:active { transform: scale(0.98); box-shadow: none; background: color-mix(in srgb, var(--accent) 6%, var(--card-bg)); }
+@media (hover: hover) {
+  .profile-card:hover, .spesa-button:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); }
+  .day-option:hover { border-color: color-mix(in srgb, var(--accent) 40%, var(--border)); }
+}
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-svg, .logo-shadow { animation: none; }
+  * { transition-duration: 0.01ms !important; }
+}
+</style>
+<!-- /restyle-2026 -->
 </head>
 <body>
 
